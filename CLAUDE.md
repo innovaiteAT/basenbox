@@ -3,7 +3,7 @@
 Automatisiert den täglichen Liefer-Ablauf von Basenbox (Wiener Basenkur-Lieferdienst): aus dem Backoffice-Export (`TT.MM. Gesamt.xlsx`) und den Spezialwünschen entstehen Etikettenliste, Spezialwunsch-Liste mit Mengen (Früh/Mittag/Abend) usw. Fachlicher Ablauf: `docs/task.md` (SOP). Aktueller Stand: Grundgerüst, noch keine Excel-Logik.
 
 ## Aufbau
-- `backend/`: Node 20 + Express (CommonJS), alle Routen unter `/api/*` in `backend/index.js`
+- `backend/`: Python 3.12 + FastAPI, alle Routen unter `/api/*` in `backend/main.py`
 - `frontend/`: statisches `index.html`, ruft `/api/...` per `fetch` auf, wird von nginx ausgeliefert
 - `devops/`: `docker-compose.yml`, Dockerfiles (`devops/docker/`), nginx-Config (`devops/nginx/nginx.conf`)
 - `data/`: `input/` (Originaltabellen, Beispiel unter `input/example/KW24/`, Vorlagen unter `input/templates/`) und `output/` (Ergebnisse). Im Backend unter `/app/data` gemountet, Inhalt gitignored
@@ -18,7 +18,7 @@ Automatisiert den täglichen Liefer-Ablauf von Basenbox (Wiener Basenkur-Lieferd
 ## Stolperfallen
 - Nach außen nur Port 8080 (Frontend). Das Backend hat keinen eigenen Port, erreichbar nur über nginx unter `/api/`.
 - `frontend.Dockerfile` kopiert nur `frontend/index.html`. Neue Frontend-Dateien dort ergänzen.
-- Neue npm-Pakete in `backend/package.json` eintragen, danach mit `--build` neu starten.
+- Neue Python-Pakete mit fester Version in `backend/requirements.txt` eintragen, danach mit `--build` neu starten.
 - Excel-Dateien enthalten Kundendaten: nie in Git, Logs oder Doku übernehmen.
 
 ## Claude-Setup
