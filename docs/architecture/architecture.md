@@ -1,5 +1,7 @@
 # Architektur
 
+Grafischer Überblick: [Landkarte](architecture/landkarte.pdf) (Quelle `architecture/landkarte.html`). Bei neuen Bausteinen beide Stellen pflegen.
+
 ## Überblick
 
 | Bereich  | Ordner      | Technik |

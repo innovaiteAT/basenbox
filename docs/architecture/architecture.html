@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Basenbox Architektur-Landkarte</title>
+<!--
+  Architektur-Landkarte: vier Querformat-Seiten mit Inline-SVG im Verpackungs-Design (docs/company/design.md).
+  PDF neu erzeugen (aus dem Projektordner):
+  "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless --no-pdf-header-footer
+    --print-to-pdf="docs\architecture\landkarte.pdf" "file:///<Pfad>/docs/architecture/landkarte.html"
+  Inhalt abgleichen mit docs/architecture.md, wenn sich Bausteine ändern.
+-->
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root {
+    --lemon: #FFE000; --orange: #FFB200; --lime: #C5DB2E; --green: #6FA81E; --coral: #E84A3F;
+    --ink: #1A1A1A; --stone: #5B5550; --mist: #F4F2EE; --line: #E4E0DA; --white: #FFFFFF;
+    --blue: #8CC3E8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #EAE7E2; }
+  body {
+    font-family: "Century Gothic", "Questrial", "Didact Gothic", sans-serif;
+    color: var(--stone); font-size: 10.5pt; line-height: 1.5;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    counter-reset: seite;
+  }
+  @media screen { .page { margin: 16px auto; box-shadow: 0 10px 30px rgba(26,26,26,.12); } }
+
+  .page {
+    width: 297mm; height: 210mm; position: relative; overflow: hidden; background: var(--white);
+    padding: 13mm 18mm 0; break-after: page; counter-increment: seite;
+  }
+  .page:last-child { break-after: auto; }
+
+  .head { height: 27mm; position: relative; z-index: 1; }
+  .kicker { font-size: 8.5pt; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--stone); margin-bottom: 2pt; }
+  h1 { font-size: 23pt; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--stone); margin: 0 0 3pt; line-height: 1.15; }
+  h1 b { font-weight: 700; color: var(--ink); }
+  .lead { font-size: 11pt; margin: 0; }
+
+  svg.map { display: block; width: 261mm; height: auto; position: relative; z-index: 1; }
+
+  .footer {
+    position: absolute; left: 18mm; right: 18mm; bottom: 8mm;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 8pt; letter-spacing: .12em; text-transform: uppercase; color: var(--stone);
+  }
+  .footer img { height: 6mm; }
+  .footer .right { display: flex; align-items: center; gap: 6pt; }
+  .footer .num::before { content: counter(seite); font-weight: 700; color: var(--ink); letter-spacing: 0; font-size: 9pt; margin-left: 6pt; }
+  .dots { display: inline-flex; gap: 3pt; }
+  .dots i { width: 6pt; height: 6pt; border-radius: 50%; display: inline-block; }
+  .dots i:nth-child(1) { background: var(--lemon); }
+  .dots i:nth-child(2) { background: var(--lime); }
+  .dots i:nth-child(3) { background: var(--coral); }
+
+  .trio { position: absolute; right: 18mm; top: 11mm; display: flex; z-index: 2; }
+  .trio span {
+    width: 21mm; height: 21mm; border-radius: 50%; border: 1.2mm solid var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8pt; font-weight: 700; color: var(--ink); margin-left: -5mm;
+  }
+  .trio span:nth-child(1) { background: var(--lemon); margin-left: 0; }
+  .trio span:nth-child(2) { background: var(--lime); }
+  .trio span:nth-child(3) { background: var(--coral); color: var(--white); }
+  .deco { position: absolute; border-radius: 50%; z-index: 0; }
+
+  /* ---------- SVG-Bausteine ---------- */
+  svg.map text { font-family: "Century Gothic", "Questrial", "Didact Gothic", sans-serif; fill: var(--stone); }
+  .t   { font-size: 18px; font-weight: 700; fill: var(--ink) !important; }
+  .t2  { font-size: 14.5px; font-weight: 700; fill: var(--ink) !important; }
+  .s   { font-size: 13.5px; }
+  .s2  { font-size: 12px; }
+  .k   { font-size: 11.5px; font-weight: 700; letter-spacing: .16em; }
+  .m   { font-family: Consolas, "Cascadia Mono", monospace !important; font-size: 12.5px; fill: var(--ink) !important; }
+  .mb  { font-family: Consolas, "Cascadia Mono", monospace !important; font-size: 13px; font-weight: 700; fill: var(--ink) !important; }
+  .ink { fill: var(--ink) !important; }
+  .wht { fill: #fff !important; }
+  .c   { text-anchor: middle; }
+  .card  { fill: var(--mist); }
+  .white { fill: #fff; stroke: var(--line); stroke-width: 2; }
+  .hero  { fill: var(--lemon); }
+  .ar  { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#ar); }
+  .ar2 { fill: none; stroke: var(--stone); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 1 6; marker-end: url(#ar2); }
+  .ard { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#ar); marker-start: url(#ar); }
+</style>
+</head>
+<body>
+
+<!-- gemeinsame Pfeilspitzen -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M1.5 1.5 L8.5 5 L1.5 8.5" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ar2" viewBox="0 0 10 10" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1.5 1.5 L8.5 5 L1.5 8.5" fill="none" stroke="#5B5550" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+</svg>
+
+<!-- ======================= Seite 1: Landkarte ======================= -->
+<section class="page">
+  <div class="trio"><span>bunt</span><span>bio</span><span>basisch</span></div>
+  <div class="head">
+    <div class="kicker">Architektur · Überblick</div>
+    <h1>Die <b>Landkarte</b></h1>
+    <p class="lead">Ein Port nach außen, zwei Container, ein Datenordner. So hängt alles zusammen.</p>
+  </div>
+
+  <svg class="map" viewBox="0 0 1000 560" role="img" aria-label="Landkarte: Browser, nginx und React-Frontend, FastAPI-Backend, Datenordner">
+    <!-- Team -->
+    <rect class="card" x="0" y="170" width="150" height="210" rx="24"/>
+    <circle class="hero" cx="75" cy="232" r="34"/>
+    <circle class="ink" cx="75" cy="223" r="9" fill="#1A1A1A"/>
+    <path d="M57 255 q0 -19 18 -19 q18 0 18 19 z" fill="#1A1A1A"/>
+    <text class="t c" x="75" y="298">Team</text>
+    <text class="s c" x="75" y="318">im Browser</text>
+    <text class="m c" x="75" y="342" style="font-size:11.5px">localhost:8080</text>
+    <rect class="white" x="0" y="396" width="150" height="34" rx="17"/>
+    <text class="s2 c ink" x="75" y="418">↑ Gesamtliste .xlsx</text>
+    <rect class="white" x="0" y="438" width="150" height="34" rx="17"/>
+    <text class="s2 c ink" x="75" y="460">↓ 6 Dateien + ZIP</text>
+
+    <!-- Team <-> nginx -->
+    <rect class="hero" x="162" y="252" width="96" height="26" rx="13"/>
+    <text class="s2 c ink" x="210" y="270" style="font-weight:700">Port 8080</text>
+    <path class="ar" d="M152 292 H288"/>
+    <path class="ar2" d="M288 320 H152"/>
+    <text class="s2 c" x="220" y="342">Antwort</text>
+
+    <!-- Docker-Rahmen -->
+    <rect x="270" y="10" width="520" height="540" rx="32" fill="#FBFAF8" stroke="#E4E0DA" stroke-width="2" stroke-dasharray="9 9"/>
+    <text class="k" x="298" y="44">DOCKER COMPOSE</text>
+    <circle cx="712" cy="40" r="6" fill="#FFE000"/><circle cx="732" cy="40" r="6" fill="#C5DB2E"/><circle cx="752" cy="40" r="6" fill="#E84A3F"/>
+
+    <!-- Frontend / nginx -->
+    <rect class="card" x="290" y="70" width="175" height="460" rx="24"/>
+    <circle cx="316" cy="104" r="15" fill="#C5DB2E"/><circle cx="316" cy="104" r="5.5" fill="#fff"/>
+    <text class="t" x="340" y="104">Frontend</text>
+    <text class="s2" x="340" y="123">React 18 · Vite · TS</text>
+    <text class="k" x="306" y="162">SCREENS</text>
+    <g class="s2">
+      <rect class="white" x="306" y="174" width="143" height="26" rx="13"/><text class="ink" x="322" y="192">1  Hochladen</text>
+      <rect class="white" x="306" y="204" width="143" height="26" rx="13"/><text class="ink" x="322" y="222">2  Prüfen</text>
+      <rect class="white" x="306" y="234" width="143" height="26" rx="13"/><text class="ink" x="322" y="252">3  Speiseplan</text>
+      <rect class="white" x="306" y="264" width="143" height="26" rx="13"/><text class="ink" x="322" y="282">4  Ergebnis</text>
+      <rect class="white" x="306" y="294" width="143" height="26" rx="13"/><text class="ink" x="322" y="312">5  Abschluss</text>
+      <rect class="white" x="306" y="330" width="143" height="26" rx="13"/><text class="ink" x="322" y="348">Verlauf</text>
+      <rect class="white" x="306" y="360" width="143" height="26" rx="13"/><text class="ink" x="322" y="378">Einstellungen</text>
+    </g>
+    <rect x="306" y="410" width="143" height="104" rx="18" fill="#1A1A1A"/>
+    <text class="k" x="322" y="438" style="fill:#FFE000">NGINX</text>
+    <text class="s2" x="322" y="462" style="fill:#fff">liefert dist/ aus</text>
+    <text class="s2" x="322" y="482" style="fill:#fff">leitet /api/ weiter</text>
+    <text class="s2" x="322" y="502" style="fill:#fff">Upload bis 12 MB</text>
+
+    <!-- nginx <-> Backend -->
+    <rect class="hero" x="470" y="254" width="50" height="26" rx="13"/>
+    <text class="s2 c ink" x="495" y="272" style="font-weight:700">/api/</text>
+    <path class="ar" d="M467 292 H523"/>
+    <path class="ar2" d="M523 320 H467"/>
+    <text class="s2 c" x="495" y="344">:3000</text>
+
+    <!-- Backend -->
+    <rect class="card" x="525" y="70" width="245" height="460" rx="24"/>
+    <circle cx="551" cy="104" r="15" fill="#FFB200"/><circle cx="551" cy="104" r="5.5" fill="#fff"/>
+    <text class="t" x="575" y="104">Backend</text>
+    <text class="s2" x="575" y="123">FastAPI · Python 3.12</text>
+
+    <rect class="white" x="541" y="148" width="213" height="58" rx="16"/>
+    <text class="t2" x="559" y="173">API</text>
+    <text class="s2" x="559" y="193">health · runs · config</text>
+    <path class="ar" d="M647 207 V218"/>
+
+    <rect class="white" x="541" y="220" width="213" height="58" rx="16"/>
+    <text class="t2" x="559" y="245">Service</text>
+    <text class="s2" x="559" y="265">verbindet alle Bausteine</text>
+
+    <path class="ar" d="M606 279 V298"/>
+    <path class="ar" d="M716 279 V298"/>
+
+    <rect class="hero" x="541" y="300" width="130" height="150" rx="18"/>
+    <text class="t2" x="557" y="327">Domain</text>
+    <text class="s2 ink" x="557" y="350">reine Logik,</text>
+    <text class="s2 ink" x="557" y="367">kein I/O</text>
+    <circle cx="561" cy="394" r="4" fill="#1A1A1A"/><text class="s2 ink" x="572" y="398">Regelengine</text>
+    <circle cx="561" cy="414" r="4" fill="#1A1A1A"/><text class="s2 ink" x="572" y="418">Summen</text>
+    <circle cx="561" cy="434" r="4" fill="#1A1A1A"/><text class="s2 ink" x="572" y="438">Texte</text>
+
+    <rect class="white" x="678" y="300" width="76" height="150" rx="18"/>
+    <text class="t2" x="694" y="327">IO</text>
+    <text class="s2" x="694" y="352">Excel</text>
+    <text class="s2" x="694" y="372">PDF</text>
+    <text class="s2" x="694" y="392">Ablage</text>
+    <text class="s2" x="694" y="412">Config</text>
+
+    <rect class="white" x="541" y="470" width="213" height="42" rx="21"/>
+    <text class="s2 c ink" x="647" y="496">pytest · Golden Test</text>
+
+    <!-- Backend -> Daten -->
+    <rect class="hero" x="772" y="374" width="64" height="26" rx="13"/>
+    <text class="s2 c ink" x="804" y="392" style="font-weight:700">Volume</text>
+    <path class="ar" d="M756 412 H846"/>
+    <text class="s2 c" x="804" y="436">/app/data</text>
+
+    <!-- Daten -->
+    <rect class="card" x="850" y="120" width="150" height="362" rx="24"/>
+    <path d="M868 142 h13 l4 5 h19 v21 h-36 z" fill="#FFB200"/>
+    <text class="t" x="918" y="162">data/</text>
+
+    <rect class="white" x="864" y="184" width="122" height="66" rx="16"/>
+    <circle cx="880" cy="204" r="6" fill="#C5DB2E"/><text class="mb" x="892" y="209">input/</text>
+    <text class="s2" x="878" y="232">Vorlagen</text>
+
+    <rect class="white" x="864" y="260" width="122" height="90" rx="16"/>
+    <circle cx="880" cy="280" r="6" fill="#FFB200"/><text class="mb" x="892" y="285">config/</text>
+    <text class="s2" x="878" y="308">Regeln</text>
+    <text class="s2" x="878" y="326">Speiseplan</text>
+    
+    <rect class="white" x="864" y="360" width="122" height="104" rx="16"/>
+    <circle cx="880" cy="380" r="6" fill="#8CC3E8"/><text class="mb" x="892" y="385">output/</text>
+    <text class="s2" x="878" y="408">KW / Tag</text>
+    <text class="s2" x="878" y="426">run.json</text>
+    <text class="s2" x="878" y="444">6 Dateien</text>
+
+    <rect x="850" y="498" width="150" height="30" rx="15" fill="#E84A3F"/>
+    <text class="s2 c wht" x="925" y="518" style="font-weight:700">nicht in Git</text>
+    <text class="s2 c" x="925" y="549">Kundendaten, nur lokal</text>
+  </svg>
+
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt="Basenbox"><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ======================= Seite 2: Tagesablauf ======================= -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Architektur · Datenfluss</div>
+    <h1>Vom Upload zur <b>Lieferung</b></h1>
+    <p class="lead">Fünf Schritte im Frontend, je ein Baustein im Backend, ein gemeinsamer Run als Quelle der Wahrheit.</p>
+  </div>
+
+  <svg class="map" viewBox="0 0 1000 560" role="img" aria-label="Datenfluss in fünf Schritten vom Upload bis zu den Tagesdateien">
+    <!-- Schritte im Frontend -->
+    <g>
+      <rect class="card" x="0" y="0" width="176" height="116" rx="22"/>
+      <circle class="hero" cx="34" cy="34" r="20"/><text class="t c" x="34" y="41">1</text>
+      <text class="t" x="64" y="41">Hochladen</text>
+      <text class="s2" x="18" y="76">Gesamtliste .xlsx</text>
+      <text class="s2" x="18" y="96">per Drag &amp; Drop</text>
+
+      <rect class="card" x="206" y="0" width="176" height="116" rx="22"/>
+      <circle class="hero" cx="240" cy="34" r="20"/><text class="t c" x="240" y="41">2</text>
+      <text class="t" x="270" y="41">Prüfen</text>
+      <text class="s2" x="224" y="76">Wünsche kontrollieren</text>
+      <text class="s2" x="224" y="96">offene Fälle klären</text>
+
+      <rect class="card" x="412" y="0" width="176" height="116" rx="22"/>
+      <circle class="hero" cx="446" cy="34" r="20"/><text class="t c" x="446" y="41">3</text>
+      <text class="t" x="476" y="41">Speiseplan</text>
+      <text class="s2" x="430" y="76">Zutaten je Mahlzeit</text>
+      <text class="s2" x="430" y="96">Früh · Mittag · Abend</text>
+
+      <rect class="card" x="618" y="0" width="176" height="116" rx="22"/>
+      <circle class="hero" cx="652" cy="34" r="20"/><text class="t c" x="652" y="41">4</text>
+      <text class="t" x="682" y="41">Ergebnis</text>
+      <text class="s2" x="636" y="76">Summen und Mailtexte</text>
+      <text class="s2" x="636" y="96">Live-Vorschau</text>
+
+      <rect class="card" x="824" y="0" width="176" height="116" rx="22"/>
+      <circle class="hero" cx="858" cy="34" r="20"/><text class="t c" x="858" y="41">5</text>
+      <text class="t" x="888" y="41">Abschluss</text>
+      <text class="s2" x="842" y="76">Dateien erzeugen</text>
+      <text class="s2" x="842" y="96">Checklisten, ZIP</text>
+    </g>
+
+    <!-- API-Aufrufe -->
+    <path class="ar" d="M88 118 V188"/>
+    <path class="ar" d="M294 118 V188"/>
+    <path class="ar" d="M500 118 V188"/>
+    <path class="ar" d="M706 118 V188"/>
+    <path class="ar" d="M912 118 V188"/>
+    <g class="m" style="font-size:11px">
+      <rect class="white" x="30" y="140" width="116" height="26" rx="13"/><text class="c" x="88" y="157">POST /api/runs</text>
+      <rect class="white" x="218" y="140" width="152" height="26" rx="13"/><text class="c" x="294" y="157">PATCH /api/runs/{id}</text>
+      <rect class="white" x="424" y="140" width="152" height="26" rx="13"/><text class="c" x="500" y="157">PATCH /api/runs/{id}</text>
+      <rect class="white" x="630" y="140" width="152" height="26" rx="13"/><text class="c" x="706" y="157">PATCH /api/runs/{id}</text>
+      <rect class="white" x="836" y="140" width="152" height="26" rx="13"/><text class="c" x="912" y="157">POST …/generate</text>
+    </g>
+
+    <!-- Bausteine im Backend -->
+    <g>
+      <rect class="white" x="0" y="190" width="176" height="160" rx="22"/>
+      <circle cx="22" cy="216" r="7" fill="#C5DB2E"/><text class="mb" x="36" y="221">excel_reader</text>
+      <text class="s2" x="18" y="256">Kopfzeile finden</text>
+      <text class="s2" x="18" y="278">Spalten per Alias</text>
+      <text class="s2" x="18" y="300">Datum aus Dateiname</text>
+      <text class="s2" x="18" y="322">nach Nummer sortieren</text>
+
+      <rect class="white" x="206" y="190" width="176" height="160" rx="22"/>
+      <circle cx="228" cy="216" r="7" fill="#FFB200"/><text class="mb" x="242" y="221">engine</text>
+      <text class="s2" x="224" y="256">Text in Segmente</text>
+      <text class="s2" x="224" y="278">Regeln anwenden</text>
+      <text class="s2" x="224" y="300">Treffer mit Begründung</text>
+      <text class="s2" x="224" y="322">Review-Queue</text>
+
+      <rect class="white" x="412" y="190" width="176" height="160" rx="22"/>
+      <circle cx="434" cy="216" r="7" fill="#8CC3E8"/><text class="mb" x="448" y="221">totals</text>
+      <text class="s2" x="430" y="256">Darstellung je Menü</text>
+      <text class="s2" x="430" y="278">Mahlzeiten-Summen</text>
+      <text class="s2" x="430" y="300">Ohne Zutat · Add-ons</text>
+      <text class="s2" x="430" y="322">Check muss 0 sein</text>
+
+      <rect class="white" x="618" y="190" width="176" height="160" rx="22"/>
+      <circle cx="640" cy="216" r="7" fill="#6FA81E"/><text class="mb" x="654" y="221">derived</text>
+      <text class="s2" x="636" y="256">Lieferdatum</text>
+      <text class="s2" x="636" y="278">Mailtexte</text>
+      <text class="s2" x="636" y="300">TSV „Sortiment neu“</text>
+      <text class="s2" x="636" y="322">AC-Strings · Brot</text>
+
+      <rect class="white" x="824" y="190" width="176" height="160" rx="22"/>
+      <circle cx="846" cy="216" r="7" fill="#E84A3F"/><text class="mb" x="860" y="221">writer</text>
+      <text class="s2" x="842" y="256">Gesamt · Etiketten</text>
+      <text class="s2" x="842" y="278">Spezialwünsche</text>
+      <text class="s2" x="842" y="300">genaue Menge</text>
+      <text class="s2" x="842" y="322">ZIP-Paket</text>
+    </g>
+
+    <!-- Run -->
+    <path class="ar" d="M88 352 V398"/>
+    <path class="ard" d="M294 352 V398"/>
+    <path class="ard" d="M500 352 V398"/>
+    <path class="ard" d="M706 352 V398"/>
+    <path class="ar" d="M912 398 V352" style="marker-end:url(#ar)"/>
+    <rect class="hero" x="0" y="400" width="1000" height="74" rx="26"/>
+    <text class="k ink" x="32" y="428">EINE QUELLE DER WAHRHEIT</text>
+    <text class="ink" x="32" y="460" style="font-size:26px;font-weight:700">run.json</text>
+    <text class="s ink" x="250" y="436">Zeilen · Treffer · Summen · Warnungen · Mailtexte · Checklisten</text>
+    <text class="s ink" x="250" y="458">Jede Änderung rechnet alles neu, die Vorschau braucht keine Dateien.</text>
+
+    <!-- Ergebnisdateien -->
+    <path class="ar" d="M500 476 V492"/>
+    <g class="s2 ink">
+      <rect x="53" y="496" width="102" height="34" rx="17" fill="#EEF4C9"/><text class="c" x="104" y="518">Gesamt.xlsx</text>
+      <rect x="165" y="496" width="157" height="34" rx="17" fill="#EEF4C9"/><text class="c" x="243" y="518">Etikettenliste.xlsx</text>
+      <rect x="332" y="496" width="157" height="34" rx="17" fill="#EEF4C9"/><text class="c" x="410" y="518">Spezialwünsche.xlsx</text>
+      <rect x="499" y="496" width="150" height="34" rx="17" fill="#FBD9D5"/><text class="c" x="574" y="518">Spezialwünsche.pdf</text>
+      <rect x="659" y="496" width="143" height="34" rx="17" fill="#EEF4C9"/><text class="c" x="730" y="518">genaue Menge.xlsx</text>
+      <rect x="812" y="496" width="136" height="34" rx="17" fill="#FBD9D5"/><text class="c" x="880" y="518">genaue Menge.pdf</text>
+    </g>
+    <text class="s2" x="0" y="552" style="letter-spacing:.04em">↓ schreibt     ↕ liest und schreibt     ↑ liest     ·     grün = Excel     rosa = PDF</text>
+  </svg>
+
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt="Basenbox"><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ======================= Seite 3: Backend innen ======================= -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Architektur · Backend</div>
+    <h1>Innen im <b>Backend</b></h1>
+    <p class="lead">Schichten mit fester Aufrufrichtung und die Regelengine, die jede Zeile der Gesamtliste durchläuft.</p>
+  </div>
+
+  <svg class="map" viewBox="0 0 1000 560" role="img" aria-label="Backend-Schichten und Ablauf der Regelengine">
+    <!-- Schichten -->
+    <rect class="card" x="0" y="50" width="190" height="190" rx="24"/>
+    <text class="k" x="22" y="82">SCHICHT 1</text>
+    <text class="t" x="22" y="110">API</text>
+    <text class="s2" x="22" y="130">FastAPI-Router</text>
+    <text class="m" x="22" y="164">health.py</text>
+    <text class="m" x="22" y="186">runs.py</text>
+    <text class="m" x="22" y="208">config.py</text>
+
+    <path class="ar" d="M192 145 H248"/>
+
+    <rect class="card" x="250" y="50" width="190" height="190" rx="24"/>
+    <text class="k" x="272" y="82">SCHICHT 2</text>
+    <text class="t" x="272" y="110">Service</text>
+    <text class="s2" x="272" y="130">service.py</text>
+    <text class="m" x="272" y="164">create_run</text>
+    <text class="m" x="272" y="186">recompute</text>
+    <text class="m" x="272" y="208">generate_files</text>
+
+    <path class="ar" d="M442 145 C472 145 468 88 496 88"/>
+    <path class="ar" d="M442 145 C472 145 468 252 496 252"/>
+
+    <rect class="hero" x="500" y="0" width="500" height="180" rx="26"/>
+    <text class="k ink" x="524" y="34">SCHICHT 3 · DOMAIN</text>
+    <rect x="800" y="14" width="176" height="28" rx="14" fill="#fff"/>
+    <text class="s2 c ink" x="888" y="33" style="font-weight:700">reine Logik, kein I/O</text>
+    <g>
+      <rect class="white" x="516" y="56" width="152" height="52" rx="14"/>
+      <text class="mb" x="530" y="78">models</text><text class="s2" x="530" y="96" style="font-size:11.5px">Pydantic-Modelle</text>
+      <rect class="white" x="674" y="56" width="152" height="52" rx="14"/>
+      <text class="mb" x="688" y="78">text</text><text class="s2" x="688" y="96" style="font-size:11.5px">Umlaute · Datum</text>
+      <rect class="white" x="832" y="56" width="152" height="52" rx="14"/>
+      <text class="mb" x="846" y="78">rules</text><text class="s2" x="846" y="96" style="font-size:11.5px">Katalog · Import</text>
+      <rect class="white" x="516" y="116" width="152" height="52" rx="14"/>
+      <text class="mb" x="530" y="138">engine</text><text class="s2" x="530" y="156" style="font-size:11.5px">Treffer · Review</text>
+      <rect class="white" x="674" y="116" width="152" height="52" rx="14"/>
+      <text class="mb" x="688" y="138">totals</text><text class="s2" x="688" y="156" style="font-size:11.5px">Summen · Check</text>
+      <rect class="white" x="832" y="116" width="152" height="52" rx="14"/>
+      <text class="mb" x="846" y="138">derived</text><text class="s2" x="846" y="156" style="font-size:11.5px">Mails · TSV · AC</text>
+    </g>
+
+    <rect class="card" x="500" y="196" width="500" height="108" rx="26"/>
+    <text class="k" x="524" y="228">SCHICHT 3 · IO, LESEN UND SCHREIBEN</text>
+    <g>
+      <rect class="white" x="516" y="244" width="112" height="48" rx="14"/>
+      <text class="mb" x="528" y="264" style="font-size:12px">excel_reader</text><text class="s2" x="528" y="282" style="font-size:11.5px">liest .xlsx</text>
+      <rect class="white" x="636" y="244" width="112" height="48" rx="14"/>
+      <text class="mb" x="648" y="264" style="font-size:12px">excel_writer</text><text class="s2" x="648" y="282" style="font-size:11.5px">schreibt .xlsx</text>
+      <rect class="white" x="756" y="244" width="112" height="48" rx="14"/>
+      <text class="mb" x="768" y="264" style="font-size:12px">pdf_writer</text><text class="s2" x="768" y="282" style="font-size:11.5px">reportlab</text>
+      <rect class="white" x="876" y="244" width="108" height="48" rx="14"/>
+      <text class="mb" x="888" y="264" style="font-size:12px">storage</text><text class="s2" x="888" y="282" style="font-size:11.5px">Ablage · Config</text>
+    </g>
+    <text class="s2" x="0" y="290">Pfeile zeigen die Aufrufrichtung. Das Frontend rechnet nichts nach.</text>
+
+    <!-- Regelengine -->
+    <text class="k" x="0" y="350">REGELENGINE · JEDE ZEILE DURCHLÄUFT DIESE STATIONEN</text>
+    <g>
+      <circle class="hero" cx="70" cy="402" r="23"/><text class="t c" x="70" y="409">1</text>
+      <circle class="hero" cx="220" cy="402" r="23"/><text class="t c" x="220" y="409">2</text>
+      <circle class="hero" cx="370" cy="402" r="23"/><text class="t c" x="370" y="409">3</text>
+      <circle class="hero" cx="520" cy="402" r="23"/><text class="t c" x="520" y="409">4</text>
+      <circle class="hero" cx="670" cy="402" r="23"/><text class="t c" x="670" y="409">5</text>
+    </g>
+    <path class="ar" d="M96 402 H190"/>
+    <path class="ar" d="M246 402 H340"/>
+    <path class="ar" d="M396 402 H490"/>
+    <path class="ar" d="M546 402 H640"/>
+    <g>
+      <text class="t2 c" x="70" y="452">Zeile lesen</text>
+      <text class="s2 c" x="70" y="472">Notizen und</text><text class="s2 c" x="70" y="490">Spezialwünsche</text>
+      <text class="t2 c" x="220" y="452">Segmentieren</text>
+      <text class="s2 c" x="220" y="472">Trenner - ; , |</text><text class="s2 c" x="220" y="490">und Zeilenumbruch</text>
+      <text class="t2 c" x="370" y="452">Falten</text>
+      <text class="s2 c" x="370" y="472">ä→ae ö→oe ü→ue</text><text class="s2 c" x="370" y="490">ß→ss, Groß = klein</text>
+      <text class="t2 c" x="520" y="452">Regeln prüfen</text>
+      <text class="s2 c" x="520" y="472">Regex je Regel</text><text class="s2 c" x="520" y="490">Kurzcodes nur GROSS</text>
+      <text class="t2 c" x="670" y="452">Datum prüfen</text>
+      <text class="s2 c" x="670" y="472">Fremdes Datum:</text><text class="s2 c" x="670" y="490">Regel übersprungen</text>
+    </g>
+
+    <path class="ar" d="M694 396 C730 392 740 384 770 384"/>
+    <path class="ar" d="M690 418 C745 440 735 500 770 500"/>
+    <rect x="774" y="354" width="226" height="108" rx="22" fill="#EEF4C9"/>
+    <text class="t2" x="794" y="384">Treffer</text>
+    <text class="s2 ink" x="794" y="408">mit Regel, Muster,</text>
+    <text class="s2 ink" x="794" y="426">Textausschnitt, Spalte</text>
+    <text class="s2 ink" x="794" y="446">zählen sofort</text>
+    <rect x="774" y="472" width="226" height="88" rx="22" fill="#FBD9D5"/>
+    <text class="t2" x="794" y="500">Review-Queue</text>
+    <text class="s2 ink" x="794" y="522">„ohne“, „kein“, „allergisch“</text>
+    <text class="s2 ink" x="794" y="540">ohne Regel: zählt nie allein</text>
+    <text class="s2" x="0" y="540">Pro Regel dedupliziert · Menge ist das Maximum · Spezialwünsche gewinnen als Quelle</text>
+  </svg>
+
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt="Basenbox"><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ======================= Seite 4: Frontend, Ablage, Zahlen ======================= -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Architektur · Oberfläche und Daten</div>
+    <h1>Oberfläche, <b>Ablage</b> und Zahlen</h1>
+    <p class="lead">Das Frontend zeigt nur an. Gespeichert wird in Ordnern, gerechnet wird im Backend.</p>
+  </div>
+
+  <svg class="map" viewBox="0 0 1000 560" role="img" aria-label="Frontend-Aufbau, Datenablage und Rechenformeln">
+    <!-- Frontend -->
+    <rect class="hero" x="0" y="0" width="570" height="76" rx="24"/>
+    <text class="t" x="24" y="34">App.tsx</text>
+    <text class="s2 ink" x="24" y="56">Zustand: Ansicht · Schritt · Run · Regeln</text>
+    <path d="M404 38 H520" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+    <g>
+      <circle cx="404" cy="38" r="14" fill="#fff"/><text class="s2 c ink" x="404" y="42" style="font-weight:700">1</text>
+      <circle cx="437" cy="38" r="14" fill="#fff"/><text class="s2 c ink" x="437" y="42" style="font-weight:700">2</text>
+      <circle cx="470" cy="38" r="14" fill="#fff"/><text class="s2 c ink" x="470" y="42" style="font-weight:700">3</text>
+      <circle cx="503" cy="38" r="14" fill="#fff"/><text class="s2 c ink" x="503" y="42" style="font-weight:700">4</text>
+      <circle cx="536" cy="38" r="14" fill="#fff"/><text class="s2 c ink" x="536" y="42" style="font-weight:700">5</text>
+    </g>
+    <path class="ar" d="M135 78 V104"/>
+    <path class="ar" d="M435 78 V104"/>
+
+    <rect class="card" x="0" y="106" width="270" height="172" rx="24"/>
+    <text class="k" x="22" y="136">SCREENS</text>
+    <g class="m" style="font-size:12px">
+      <rect class="white" x="16" y="148" width="118" height="26" rx="13"/><circle cx="31" cy="161" r="8" fill="#FFE000"/><text class="s2 c ink" x="31" y="165" style="font-size:10.5px;font-weight:700">1</text><text x="46" y="165">Upload</text>
+      <rect class="white" x="140" y="148" width="118" height="26" rx="13"/><circle cx="155" cy="161" r="8" fill="#FFE000"/><text class="s2 c ink" x="155" y="165" style="font-size:10.5px;font-weight:700">2</text><text x="170" y="165">Review</text>
+      <rect class="white" x="16" y="180" width="118" height="26" rx="13"/><circle cx="31" cy="193" r="8" fill="#FFE000"/><text class="s2 c ink" x="31" y="197" style="font-size:10.5px;font-weight:700">3</text><text x="46" y="197">Menu</text>
+      <rect class="white" x="140" y="180" width="118" height="26" rx="13"/><circle cx="155" cy="193" r="8" fill="#FFE000"/><text class="s2 c ink" x="155" y="197" style="font-size:10.5px;font-weight:700">4</text><text x="170" y="197">Result</text>
+      <rect class="white" x="16" y="212" width="118" height="26" rx="13"/><circle cx="31" cy="225" r="8" fill="#FFE000"/><text class="s2 c ink" x="31" y="229" style="font-size:10.5px;font-weight:700">5</text><text x="46" y="229">Finish</text>
+      <rect class="white" x="140" y="212" width="118" height="26" rx="13"/><circle cx="155" cy="225" r="8" fill="none" stroke="#5B5550" stroke-width="1.6"/><text x="170" y="229">History</text>
+      <rect class="white" x="16" y="244" width="118" height="26" rx="13"/><circle cx="31" cy="257" r="8" fill="none" stroke="#5B5550" stroke-width="1.6"/><text x="46" y="261">Settings</text>
+    </g>
+
+    <rect class="card" x="300" y="106" width="270" height="172" rx="24"/>
+    <text class="k" x="322" y="136">COMPONENTS</text>
+    <g class="s2 c ink" style="font-size:11.5px">
+      <rect class="white" x="316" y="148" width="78" height="24" rx="12"/><text x="355" y="164">Button</text>
+      <rect class="white" x="400" y="148" width="78" height="24" rx="12"/><text x="439" y="164">Card</text>
+      <rect class="white" x="484" y="148" width="78" height="24" rx="12"/><text x="523" y="164">HeroTile</text>
+      <rect class="white" x="316" y="176" width="78" height="24" rx="12"/><text x="355" y="192">Chip</text>
+      <rect class="white" x="400" y="176" width="78" height="24" rx="12"/><text x="439" y="192">Stepper</text>
+      <rect class="white" x="484" y="176" width="78" height="24" rx="12"/><text x="523" y="192">Toggle</text>
+      <rect class="white" x="316" y="204" width="78" height="24" rx="12"/><text x="355" y="220">Dropzone</text>
+      <rect class="white" x="400" y="204" width="78" height="24" rx="12"/><text x="439" y="220">CopyField</text>
+      <rect class="white" x="484" y="204" width="78" height="24" rx="12"/><text x="523" y="220">Checklist</text>
+      <rect class="white" x="316" y="232" width="78" height="24" rx="12"/><text x="355" y="248">Toast</text>
+      <rect class="white" x="400" y="232" width="78" height="24" rx="12"/><text x="439" y="248">Notice</text>
+      <rect class="white" x="484" y="232" width="78" height="24" rx="12"/><text x="523" y="248">Title</text>
+    </g>
+
+    <path class="ar" d="M135 280 V306"/>
+    <path class="ar" d="M435 280 V306"/>
+    <rect class="card" x="0" y="308" width="570" height="62" rx="24"/>
+    <circle cx="30" cy="339" r="8" fill="#FFB200"/>
+    <text class="t2" x="50" y="335">api/client.ts · types.ts</text>
+    <text class="s2" x="50" y="355">typisierter Client, Typen spiegeln die Pydantic-Modelle</text>
+    <rect class="hero" x="458" y="324" width="92" height="30" rx="15"/>
+    <text class="s2 c ink" x="504" y="344" style="font-weight:700">→ /api/*</text>
+
+    <!-- Ablage -->
+    <rect class="card" x="610" y="0" width="390" height="370" rx="26"/>
+    <path d="M634 22 h14 l4 5 h22 v24 h-40 z" fill="#FFB200"/>
+    <text class="t" x="690" y="44">data/</text>
+    <rect x="896" y="22" width="86" height="28" rx="14" fill="#E84A3F"/>
+    <text class="s2 c wht" x="939" y="41" style="font-weight:700">gitignored</text>
+
+    <rect class="white" x="628" y="66" width="354" height="72" rx="18"/>
+    <circle cx="650" cy="90" r="7" fill="#C5DB2E"/><text class="mb" x="666" y="95">input/</text>
+    <text class="s2" x="646" y="116">templates/ Spezialwünsche-Vorlage, Suchwörter</text>
+
+    <rect class="white" x="628" y="150" width="354" height="102" rx="18"/>
+    <circle cx="650" cy="174" r="7" fill="#FFB200"/><text class="mb" x="666" y="179">config/</text>
+    <text class="m" x="646" y="202">rules.json</text>
+    <text class="m" x="646" y="222">menu_defaults.json</text>
+    <text class="m" x="646" y="242">mail_templates.json</text>
+    <text class="s2" x="830" y="222" style="font-size:11.5px">entsteht beim</text>
+    <text class="s2" x="830" y="240" style="font-size:11.5px">ersten Zugriff</text>
+
+    <rect class="white" x="628" y="264" width="354" height="92" rx="18"/>
+    <circle cx="650" cy="288" r="7" fill="#8CC3E8"/><text class="mb" x="666" y="293">output/KW24/08.06. Montag/</text>
+    <text class="m" x="646" y="318">run.json   _upload.xlsx</text>
+    <text class="s2" x="646" y="340">+ die 6 Tagesdateien</text>
+
+    <!-- Berechnung -->
+    <text class="k" x="0" y="402">BERECHNUNG PRO MAHLZEIT</text>
+    <rect class="card" x="0" y="416" width="235" height="144" rx="24"/>
+    <text class="k" x="22" y="446">SCHRITT 1</text>
+    <text class="ink" x="22" y="480" style="font-size:26px;font-weight:700">Gesamt</text>
+    <text class="s2" x="22" y="506">Boxen + Σ(−1) „Ohne Mahlzeit“</text>
+    <text class="s2" x="22" y="526">+ Σ(N−1) „Mehrfach“</text>
+
+    <rect class="card" x="255" y="416" width="235" height="144" rx="24"/>
+    <text class="k" x="277" y="446">SCHRITT 2</text>
+    <text class="ink" x="277" y="480" style="font-size:26px;font-weight:700">Normal</text>
+    <text class="s2" x="277" y="506">Gesamt minus Portionen</text>
+    <text class="s2" x="277" y="526">mit einem Ausschluss</text>
+
+    <rect class="card" x="510" y="416" width="235" height="144" rx="24"/>
+    <text class="k" x="532" y="446">SCHRITT 3</text>
+    <text class="ink" x="532" y="480" style="font-size:26px;font-weight:700">Kombi</text>
+    <text class="s2" x="532" y="506">weitere Ausschlüsse</text>
+    <text class="s2" x="532" y="526">derselben Portion</text>
+
+    <rect class="hero" x="765" y="416" width="235" height="144" rx="24"/>
+    <text class="k ink" x="787" y="446">PROBE</text>
+    <text class="ink" x="787" y="490" style="font-size:36px;font-weight:700">Check = 0</text>
+    <text class="s2 ink" x="787" y="516">Gesamt − Normal − Σ Ohne</text>
+    <text class="s2 ink" x="787" y="536">+ Kombi, sonst Warnung</text>
+  </svg>
+
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt="Basenbox"><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+</body>
+</html>
