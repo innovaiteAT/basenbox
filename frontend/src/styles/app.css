@@ -311,7 +311,7 @@ h3 {
 }
 
 .hero {
-  background: var(--bb-lemon);
+  background: var(--meal-color, var(--bb-lemon));
   border-radius: var(--radius-l);
   padding: 24px;
   border: 0;
@@ -325,18 +325,6 @@ h3 {
 
 .hero:hover {
   box-shadow: var(--shadow);
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  right: -36px;
-  top: -36px;
-  background: var(--meal-color, var(--bb-orange));
-  opacity: 0.9;
 }
 
 .hero__label {
@@ -1152,13 +1140,6 @@ hr.soft {
 
   .grid--hero .hero__sub {
     font-size: 12px;
-  }
-
-  .grid--hero .hero::after {
-    width: 56px;
-    height: 56px;
-    right: -18px;
-    top: -18px;
   }
 
   .shell {
