@@ -1,0 +1,29 @@
+/* Verpackungs-Design aus docs/company/design.md */
+:root {
+  --bb-lemon: #ffe000;
+  --bb-orange: #ffb200;
+  --bb-lime: #c5db2e;
+  --bb-green: #6fa81e;
+  --bb-coral: #e84a3f;
+  --bb-ink: #1a1a1a;
+  --bb-stone: #5b5550;
+  --bb-mist: #f4f2ee;
+  --bb-line: #e4e0da;
+  --bb-white: #ffffff;
+
+  /* Mahlzeit-Farbcode, angelehnt an die Excel-Farben der SOP */
+  --meal-F: var(--bb-lime);
+  --meal-M: var(--bb-orange);
+  --meal-A: #8cc3e8;
+  --meal-F-soft: #eef4c9;
+  --meal-M-soft: #ffefc7;
+  --meal-A-soft: #e1eff9;
+
+  --font: "Questrial", "Century Gothic", sans-serif;
+  --radius-s: 12px;
+  --radius: 16px;
+  --radius-l: 24px;
+  --shadow: 0 10px 30px rgba(26, 26, 26, 0.08);
+  --focus: 0 0 0 3px var(--bb-white), 0 0 0 5px var(--bb-ink);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
