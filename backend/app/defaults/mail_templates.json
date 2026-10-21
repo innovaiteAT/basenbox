@@ -1,0 +1,22 @@
+{
+  "recipients": [
+    {
+      "id": "gaumenfreundinnen",
+      "name": "Gaumenfreundinnen",
+      "email": "",
+      "subject": "Basenbox {wochentag} {datum}",
+      "templates": {
+        "default": "Hallo ihr Lieben,\n\nfür {wochentag}, den {datum}, haben wir {boxen} Boxen.\n\nFrühstück: {frueh}\nMittag: {mittag}\nAbend: {abend}\n\nOhne Nüsse: {ohne_nuss}\nOhne Zwiebel & Knoblauch: {ohne_zk}\nAdd-ons: {addons}\n\nDie Liste der Spezialwünsche hängt an.\n\nDanke und liebe Grüße\nBasenbox"
+      }
+    },
+    {
+      "id": "goran",
+      "name": "Goran",
+      "email": "",
+      "subject": "Lieferliste {wochentag} {datum}",
+      "templates": {
+        "default": "Hallo Goran,\n\nanbei die Gesamtliste für {wochentag}, den {datum}: {boxen} Boxen.\n\nDie Spezialwünsche stehen fett in der letzten Spalte.\n\nDanke und liebe Grüße\nBasenbox"
+      }
+    }
+  ]
+}

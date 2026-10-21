@@ -1,0 +1,30 @@
+[
+  {"id": "nuts", "label": "Nüsse", "kind": "ingredient", "short": "ON", "cell": "Nüsse",
+   "patterns": ["n(ü|u)ss"], "case_sensitive": ["ON"]},
+  {"id": "zk", "label": "Z&K", "kind": "ingredient", "short": "ZK", "cell": "Zwiebeln, Knoblauch",
+   "patterns": ["zwiebel", "knoblauch", "knofi", "knobi", "z\\s*[&+/]\\s*k\\b", "z\\s*und\\s*k\\b"], "case_sensitive": ["ZK"]},
+  {"id": "raisins", "label": "Rosinen", "kind": "ingredient", "cell": "Rosinen",
+   "patterns": ["rosine"]},
+
+  {"id": "no_f", "label": "Ohne Frühstück", "kind": "meal_minus", "meal": "F", "short": "OF",
+   "patterns": ["ohne\\s+fr(ü|u)h(st(ü|u)ck)?", "kein(en)?\\s+fr(ü|u)h(st(ü|u)ck)?"], "case_sensitive": ["OF"]},
+  {"id": "no_m", "label": "Ohne Mittag", "kind": "meal_minus", "meal": "M", "short": "OM",
+   "patterns": ["ohne\\s+mittag(essen)?", "kein(en)?\\s+mittag(essen)?"], "case_sensitive": ["OM"]},
+  {"id": "no_a", "label": "Ohne Abend", "kind": "meal_minus", "meal": "A", "short": "OA",
+   "patterns": ["ohne\\s+abend(essen)?", "kein(en)?\\s+abend(essen)?"], "case_sensitive": ["OA"]},
+
+  {"id": "multi_f", "label": "Mehrfach Frühstück", "kind": "meal_multi", "meal": "F",
+   "patterns": ["(\\d)\\s*x\\s*fr(ü|u)h(st(ü|u)ck)?"]},
+  {"id": "multi_m", "label": "Mehrfach Mittag", "kind": "meal_multi", "meal": "M",
+   "patterns": ["(\\d)\\s*x\\s*mittag(essen)?"]},
+  {"id": "multi_a", "label": "Mehrfach Abend", "kind": "meal_multi", "meal": "A",
+   "patterns": ["(\\d)\\s*x\\s*abend(essen)?"]},
+
+  {"id": "kreatin", "label": "Kreatin", "kind": "addon", "patterns": ["[kc]reatin"]},
+  {"id": "bitter", "label": "Bitterstoffe", "kind": "addon", "patterns": ["bitterstoff"]},
+
+  {"id": "delivery", "label": "Lieferinfo", "kind": "ignore",
+   "patterns": ["rabatt", "aktion", "gutschein", "stock\\s*:", "klingel", "abstell", "anruf", "anrufen",
+                "lieferzeit", "vor\\s+(die|der|die\\s+wohnungs)\\s*t(ü|u)r", "nicht\\s+(da|zu\\s*hause|daheim)",
+                "nachbar", "hinterleg"]}
+]
