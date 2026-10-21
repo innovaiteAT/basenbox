@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Basenbox Handbuch</title>
+<!--
+  Mitarbeiter-Handbuch für den Tagesablauf.
+  PDF neu erzeugen (aus dem Projektordner):
+  "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless --no-pdf-header-footer
+    --print-to-pdf="docs\Basenbox-Handbuch.pdf" "file:///<Pfad>/docs/handbuch/handbuch.html"
+  Alle Namen in den Bildschirm-Beispielen sind erfunden.
+-->
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --lemon: #FFE000; --orange: #FFB200; --lime: #C5DB2E; --green: #6FA81E; --coral: #E84A3F;
+    --ink: #1A1A1A; --stone: #5B5550; --mist: #F4F2EE; --line: #E4E0DA; --white: #FFFFFF;
+    --meal-F: #C5DB2E; --meal-M: #FFB200; --meal-A: #8CC3E8;
+    --meal-F-soft: #EEF4C9; --meal-M-soft: #FFEFC7; --meal-A-soft: #E1EFF9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--white); }
+  body {
+    font-family: "Century Gothic", "Questrial", "Didact Gothic", sans-serif;
+    color: var(--stone); font-size: 10.5pt; line-height: 1.5;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    counter-reset: seite;
+  }
+  strong, b { color: var(--ink); }
+  p { margin: 0 0 8pt; }
+
+  /* ---------- Seiten ---------- */
+  .page {
+    width: 210mm; height: 297mm; position: relative; overflow: hidden;
+    padding: 20mm 18mm 24mm; break-after: page; counter-increment: seite;
+  }
+  .page:last-child { break-after: auto; }
+  .page--lemon { background: var(--lemon); }
+  .page--ink { background: var(--ink); color: #CFC9C2; }
+  .footer {
+    position: absolute; left: 18mm; right: 18mm; bottom: 10mm;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 8pt; letter-spacing: .12em; text-transform: uppercase; color: var(--stone);
+  }
+  .footer img { height: 6mm; }
+  .footer .right { display: flex; align-items: center; gap: 6pt; }
+  .footer .num::before { content: counter(seite); font-weight: 700; color: var(--ink); letter-spacing: 0; font-size: 9pt; margin-left: 6pt; }
+  .dots { display: inline-flex; gap: 3pt; }
+  .dots i { width: 6pt; height: 6pt; border-radius: 50%; display: inline-block; }
+  .dots i:nth-child(1) { background: var(--lemon); }
+  .dots i:nth-child(2) { background: var(--lime); }
+  .dots i:nth-child(3) { background: var(--coral); }
+  .deco { position: absolute; border-radius: 50%; z-index: 0; }
+  .page > *:not(.deco) { position: relative; z-index: 1; }
+  .page > .footer { position: absolute; }
+
+  /* ---------- Typografie ---------- */
+  .kicker { font-size: 8.5pt; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--stone); margin-bottom: 4pt; }
+  h1 { font-size: 24pt; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--stone); margin: 0 0 6pt; line-height: 1.15; }
+  h1 b { font-weight: 700; color: var(--ink); }
+  .lead { font-size: 12pt; line-height: 1.5; max-width: 150mm; margin-bottom: 14pt; }
+  h2 { font-size: 13pt; color: var(--ink); margin: 14pt 0 6pt; }
+  h3 { font-size: 11pt; color: var(--ink); margin: 0 0 4pt; }
+  .small { font-size: 8.5pt; }
+  .muted { color: var(--stone); }
+  code, .mono { font-family: Consolas, "Cascadia Mono", monospace; font-size: 9pt; background: var(--mist); color: var(--ink); padding: 1pt 4pt; border-radius: 4pt; white-space: nowrap; }
+  ul.clean { list-style: none; padding: 0; margin: 0; }
+  ul.bul { padding-left: 0; list-style: none; margin: 0 0 8pt; }
+  ul.bul li { padding-left: 14pt; position: relative; margin-bottom: 4pt; }
+  ul.bul li::before { content: ""; position: absolute; left: 0; top: 5pt; width: 6pt; height: 6pt; border-radius: 50%; background: var(--lime); }
+
+  /* ---------- Bausteine ---------- */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10pt; }
+  .card { background: var(--mist); border-radius: 12pt; padding: 12pt 14pt; break-inside: avoid; }
+  .card--white { background: var(--white); border: 1px solid var(--line); }
+  .card h3 { display: flex; align-items: center; gap: 8pt; }
+  .ic { width: 26pt; height: 26pt; border-radius: 50%; display: inline-grid; place-items: center; flex: none; background: var(--lemon); color: var(--ink); }
+  .ic svg { width: 14pt; height: 14pt; }
+  .ic--lime { background: var(--lime); } .ic--coral { background: var(--coral); color: var(--white); }
+  .ic--white { background: var(--white); } .ic--orange { background: var(--orange); }
+  .num-c { width: 22pt; height: 22pt; border-radius: 50%; background: var(--lemon); color: var(--ink); font-weight: 700; display: inline-grid; place-items: center; flex: none; font-size: 10pt; }
+  .num-c--ink { background: var(--ink); color: var(--white); }
+
+  .note { display: flex; gap: 10pt; align-items: flex-start; border-radius: 12pt; padding: 10pt 12pt; margin: 8pt 0; break-inside: avoid; }
+  .note .ic { width: 22pt; height: 22pt; } .note .ic svg { width: 12pt; height: 12pt; }
+  .note--tip { background: #FFF7B8; }
+  .note--warn { background: #FDE3E0; }
+  .note--warn .ic { background: var(--coral); color: var(--white); }
+  .note--ok { background: var(--meal-F-soft); }
+  .note--ok .ic { background: var(--lime); }
+  .note p:last-child { margin: 0; }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: 9.5pt; break-inside: avoid; }
+  table.t th { background: var(--mist); color: var(--ink); text-align: left; font-weight: 700; padding: 6pt 8pt; }
+  table.t th:first-child { border-top-left-radius: 8pt; } table.t th:last-child { border-top-right-radius: 8pt; }
+  table.t td { padding: 6pt 8pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.t td.hl, table.t th.hl { background: #FFF7B8; }
+  table.t .c { text-align: center; }
+
+  .steps { display: grid; gap: 8pt; }
+  .step { display: flex; gap: 10pt; align-items: flex-start; }
+  .step p { margin: 2pt 0 0; }
+
+  .pill { display: inline-block; border-radius: 999px; padding: 1pt 7pt; font-size: 8pt; font-weight: 700; color: var(--ink); background: var(--mist); white-space: nowrap; }
+  .pill--lime { background: var(--lime); } .pill--coral { background: var(--coral); color: var(--white); }
+  .pill--lemon { background: var(--lemon); }
+  .chip { display: inline-block; border-radius: 999px; padding: 1.5pt 8pt; font-size: 8pt; color: var(--ink); border: 1px solid transparent; white-space: nowrap; }
+  .chip--F { background: var(--meal-F-soft); border-color: var(--meal-F); }
+  .chip--M { background: var(--meal-M-soft); border-color: var(--meal-M); }
+  .chip--A { background: var(--meal-A-soft); border-color: var(--meal-A); }
+  .chip--addon { background: #FDE3E0; border-color: var(--coral); }
+  .chip--custom { background: var(--white); border-color: var(--ink); border-style: dashed; }
+  .chip--muted { background: var(--mist); border-color: var(--line); color: var(--stone); }
+  .btn { display: inline-flex; align-items: center; gap: 4pt; border-radius: 999px; padding: 3pt 10pt; font-size: 8pt; font-weight: 700; background: var(--ink); color: var(--white); white-space: nowrap; }
+  .btn--lemon { background: var(--lemon); color: var(--ink); }
+  .btn--ghost { background: var(--white); color: var(--ink); border: 1px solid var(--line); }
+  .btn svg { width: 9pt; height: 9pt; }
+
+  /* ---------- Bildschirm-Beispiele ---------- */
+  .shot-wrap { position: relative; margin: 6pt 0 12pt; }
+  .screen { border-radius: 12pt; background: var(--white); border: 1px solid var(--line); box-shadow: 0 6pt 18pt rgba(26,26,26,.10); overflow: hidden; font-size: 8pt; color: var(--stone); }
+  .chrome { background: var(--mist); padding: 5pt 9pt; display: flex; align-items: center; gap: 4pt; border-bottom: 1px solid var(--line); }
+  .chrome i { width: 6pt; height: 6pt; border-radius: 50%; background: var(--line); display: inline-block; }
+  .chrome span { margin-left: 8pt; background: var(--white); border-radius: 999px; padding: 1pt 10pt; font-size: 7pt; color: var(--stone); }
+  .appbar { display: flex; align-items: center; gap: 10pt; padding: 7pt 12pt; border-bottom: 1px solid var(--line); }
+  .appbar img { height: 13pt; }
+  .appbar .trio { display: inline-flex; } .appbar .trio i { width: 9pt; height: 9pt; border-radius: 50%; margin-left: -3pt; border: 1.5pt solid var(--white); display: inline-block; }
+  .appbar nav { margin-left: auto; display: flex; gap: 10pt; font-size: 7.5pt; color: var(--ink); }
+  .appbar nav .on { background: var(--mist); border-radius: 999px; padding: 1pt 7pt; font-weight: 700; }
+  .stepper { display: flex; gap: 0; padding: 8pt 14pt; align-items: center; }
+  .stepper div { display: flex; align-items: center; gap: 4pt; font-size: 7pt; flex: 1; }
+  .stepper div::after { content: ""; flex: 1; height: 1px; background: var(--line); margin: 0 5pt; }
+  .stepper div:last-child { flex: none; } .stepper div:last-child::after { display: none; }
+  .stepper b { width: 13pt; height: 13pt; border-radius: 50%; background: var(--mist); display: inline-grid; place-items: center; font-size: 7pt; color: var(--stone); }
+  .stepper .done b { background: var(--ink); color: var(--white); }
+  .stepper .cur b { background: var(--lemon); color: var(--ink); }
+  .stepper .cur { color: var(--ink); font-weight: 700; }
+  .sbody { padding: 6pt 14pt 14pt; }
+  .stitle .k { font-size: 6pt; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; }
+  .stitle .h { font-size: 14pt; text-transform: uppercase; letter-spacing: .05em; color: var(--stone); line-height: 1.2; }
+  .stitle .h b { color: var(--ink); }
+  .stitle p { font-size: 7.5pt; margin: 2pt 0 8pt; }
+  .scard { background: var(--mist); border-radius: 9pt; padding: 8pt 10pt; }
+  .scard--white { background: var(--white); border: 1px solid var(--line); }
+  .scard h4 { margin: 0; font-size: 8.5pt; color: var(--ink); display: flex; align-items: center; gap: 6pt; }
+  .scard h4 .ic { width: 16pt; height: 16pt; } .scard h4 .ic svg { width: 9pt; height: 9pt; }
+  .scard .sub { font-size: 7pt; margin-left: 22pt; }
+  .big { font-size: 22pt; font-weight: 700; color: var(--ink); line-height: 1.1; }
+  .sactions { display: flex; justify-content: space-between; margin-top: 10pt; }
+  .drop { border: 1.5pt dashed var(--stone); border-radius: 12pt; padding: 22pt; text-align: center; background: var(--mist); }
+  .drop .ic { width: 30pt; height: 30pt; margin-bottom: 6pt; }
+  .stable { width: 100%; border-collapse: collapse; font-size: 7.5pt; }
+  .stable th { text-align: left; background: var(--mist); padding: 4pt 6pt; color: var(--ink); }
+  .stable td { padding: 5pt 6pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font-size: 7pt; }
+  .seg span { padding: 2pt 7pt; color: var(--ink); border-left: 1px solid var(--line); }
+  .seg span:first-child { border-left: 0; }
+  .seg .F { background: var(--meal-F); font-weight: 700; } .seg .M { background: var(--meal-M); font-weight: 700; }
+  .seg .A { background: var(--meal-A); font-weight: 700; } .seg .N { background: var(--ink); color: var(--white); font-weight: 700; }
+  .hero { border-radius: 10pt; padding: 8pt 10pt; color: var(--ink); }
+  .hero .v { font-size: 24pt; font-weight: 700; line-height: 1.05; }
+  .hero .l { font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+  .hero .s { font-size: 7pt; }
+  .co { position: absolute; width: 17pt; height: 17pt; border-radius: 50%; background: var(--coral); color: var(--white); font-weight: 700; font-size: 8.5pt; display: grid; place-items: center; border: 2pt solid var(--white); box-shadow: 0 2pt 5pt rgba(0,0,0,.2); z-index: 5; }
+  .anc { position: relative; }
+  .co.in { position: static; display: inline-grid; vertical-align: middle; width: 15pt; height: 15pt; font-size: 7.5pt; box-shadow: none; border: 1.5pt solid var(--white); flex: none; font-style: normal; }
+  .co.pin { position: absolute; }
+  .legend { display: grid; gap: 7pt; }
+  .legend .row { display: flex; gap: 9pt; align-items: flex-start; }
+  .legend .co { position: static; flex: none; box-shadow: none; border: 0; }
+  .legend p { margin: 0; }
+
+  /* ---------- Kapitelseiten ---------- */
+  .chapter-no { font-size: 150pt; font-weight: 700; color: var(--ink); line-height: 1; margin-top: 40mm; }
+  .chapter-title { font-size: 34pt; font-weight: 700; color: var(--ink); line-height: 1.1; margin: 8pt 0 10pt; }
+  .chapter-lead { font-size: 13pt; color: var(--ink); max-width: 120mm; }
+  .chapter-list { margin-top: 18mm; display: grid; gap: 8pt; color: var(--ink); font-size: 11pt; }
+  .chapter-list div { display: flex; gap: 10pt; align-items: center; }
+  .chapter-list .num-c { background: var(--white); }
+
+  /* ---------- Zeitstrahl ---------- */
+  .timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6pt; position: relative; margin: 10pt 0 6pt; }
+  .timeline::before { content: ""; position: absolute; top: 17pt; left: 10%; right: 10%; height: 2pt; background: var(--line); }
+  .timeline > div { text-align: center; position: relative; }
+  .timeline .num-c { width: 34pt; height: 34pt; font-size: 13pt; border: 3pt solid var(--white); }
+  .timeline h3 { margin: 6pt 0 2pt; font-size: 10pt; }
+  .timeline p { font-size: 8.5pt; margin: 0; }
+</style>
+</head>
+<body>
+
+<!-- SVG-Icons (Lucide-Stil) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="M3 8l9 5 9-5M12 13v8"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/><path d="M19 17v4M17 19h4"/></symbol>
+    <symbol id="i-food" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2M6 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.3 9.3a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4Z"/><circle cx="7" cy="7" r="1.5"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="3" width="6" height="6" rx="1"/><rect x="3" y="15" width="6" height="6" rx="1"/><path d="M15 15h2v2M21 15v6h-4M15 21h.01"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-wheat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8M12 8c0-3 2-5 2-5s2 2 0 5M12 8c0-3-2-5-2-5s-2 2 0 5M12 14c2-2 5-2 5-2s0 3-3 4M12 14c-2-2-5-2-5-2s0 3 3 4"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l4 2"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+    <symbol id="i-calc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+    <symbol id="i-party" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.8M4 3h.01M22 8h.01M15 2h.01M22 20h.01M22 2l-2.2.7a2.9 2.9 0 0 0-1.9 3.3c.2.9-.5 1.8-1.4 1.8H16M11 2l.3 2.2c.2 1-.6 1.8-1.6 1.8H9"/><path d="M8.6 8.6c2.2-2.2 6.4-1.6 8.6.6s2.8 6.4.6 8.6Z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ===================== 1 COVER ===================== -->
+<section class="page" style="padding:0">
+  <div class="deco" style="width:150mm;height:150mm;background:var(--lemon);right:-45mm;top:-40mm"></div>
+  <div class="deco" style="width:70mm;height:70mm;background:var(--orange);right:62mm;top:72mm;opacity:.9"></div>
+  <div class="deco" style="width:46mm;height:46mm;background:var(--lime);left:-14mm;bottom:52mm"></div>
+  <div class="deco" style="width:22mm;height:22mm;background:var(--coral);left:34mm;bottom:40mm"></div>
+  <div style="position:absolute;left:20mm;top:22mm">
+    <img src="../company/assets/photos/basenbox_logo.jpg" alt="Basenbox" style="height:15mm">
+  </div>
+  <div style="position:absolute;left:20mm;right:20mm;top:138mm">
+    <div class="kicker">Handbuch für das Team · Wien</div>
+    <div style="font-size:40pt;line-height:1.08;color:var(--stone);font-weight:400">Dein Tages<b style="color:var(--ink)">ablauf</b><br>mit der <b style="color:var(--ink)">Basenbox-App</b></div>
+    <p style="font-size:13pt;margin-top:12pt;max-width:130mm">Von der Gesamtliste bis zum Kurbrief: Schritt für Schritt erklärt, damit jeder Liefertag entspannt klappt.</p>
+    <div style="display:flex;gap:6pt;margin-top:16pt">
+      <span style="background:var(--lemon);border-radius:999px;padding:4pt 14pt;font-weight:700;color:var(--ink)">bunt</span>
+      <span style="background:var(--lime);border-radius:999px;padding:4pt 14pt;font-weight:700;color:var(--ink)">bio</span>
+      <span style="background:var(--coral);border-radius:999px;padding:4pt 14pt;font-weight:700;color:var(--white)">basisch</span>
+    </div>
+  </div>
+  <div style="position:absolute;right:20mm;bottom:14mm;font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase">Stand Oktober 2026</div>
+</section>
+
+<!-- ===================== 2 WILLKOMMEN + INHALT ===================== -->
+<section class="page">
+  <div class="kicker">Willkommen</div>
+  <h1>Schön, dass <b>du da bist</b></h1>
+  <p class="lead">Jeden Tag bereiten wir die Lieferungen für morgen vor. Früher hieß das: Excel-Listen kopieren, filtern, Wünsche abzählen und rechnen. Heute erledigt das die Basenbox-App. Du prüfst, entscheidest und hakst ab.</p>
+
+  <div class="grid2" style="margin-bottom:14pt">
+    <div class="card">
+      <h3><span class="ic ic--lime"><svg><use href="#i-spark"/></svg></span>Das macht die App für dich</h3>
+      <ul class="bul" style="margin-top:6pt">
+        <li>liest die Gesamtliste aus dem Backoffice ein</li>
+        <li>findet Spezialwünsche in Notizen und Wunsch-Spalte</li>
+        <li>zählt Früh, Mittag und Abend aus</li>
+        <li>erstellt alle Excel- und PDF-Dateien des Tages</li>
+        <li>schreibt die Mailtexte und alle Werte für ActiveCampaign vor</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="ic"><svg><use href="#i-check"/></svg></span>Das machst du</h3>
+      <ul class="bul" style="margin-top:6pt">
+        <li>Liste im Backoffice exportieren und hochladen</li>
+        <li>unklare Wünsche kurz prüfen und entscheiden</li>
+        <li>im Speiseplan nachsehen, wo Nüsse oder Zwiebel drin sind</li>
+        <li>Mails schicken, Etiketten drucken</li>
+        <li>Kurbrief in ActiveCampaign planen, QR-Link tauschen</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Was steht in diesem Handbuch?</h2>
+  <div style="display:grid;gap:7pt;margin-top:8pt">
+    <div style="display:flex;gap:12pt;align-items:center"><span class="num-c">01</span><div><strong>Los geht's</strong> · Der Tag im Überblick, Liste exportieren, App öffnen</div></div>
+    <div style="display:flex;gap:12pt;align-items:center"><span class="num-c">02</span><div><strong>Die App Schritt für Schritt</strong> · Hochladen, Prüfen, Speiseplan, Ergebnis, Abschluss</div></div>
+    <div style="display:flex;gap:12pt;align-items:center"><span class="num-c">03</span><div><strong>Gut zu wissen</strong> · So rechnet die App, die Dateien, Verlauf und Einstellungen</div></div>
+    <div style="display:flex;gap:12pt;align-items:center"><span class="num-c">04</span><div><strong>Hilfe</strong> · Häufige Fragen, Spickzettel zum Ausdrucken, Infos für den Admin</div></div>
+  </div>
+
+  <div class="note note--tip" style="margin-top:18pt">
+    <span class="ic"><svg><use href="#i-bulb"/></svg></span>
+    <div><p><strong>Keine Angst vor Fehlern.</strong> Solange du nicht auf „Dateien erzeugen“ klickst, ändert die App nichts. Und auch danach kannst du jederzeit zurückgehen, korrigieren und die Dateien neu erzeugen.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 3 KAPITEL 01 ===================== -->
+<section class="page page--lemon">
+  <div class="deco" style="width:120mm;height:120mm;background:var(--orange);right:-40mm;bottom:-30mm;opacity:.55"></div>
+  <div class="deco" style="width:40mm;height:40mm;background:var(--white);right:60mm;bottom:70mm;opacity:.5"></div>
+  <div class="chapter-no">01</div>
+  <div class="chapter-title">Los geht's</div>
+  <p class="chapter-lead">Bevor du die App benutzt: So sieht der Tag aus und so kommst du an die Gesamtliste.</p>
+  <div class="chapter-list">
+    <div><span class="num-c">A</span>Der Tag in fünf Schritten</div>
+    <div><span class="num-c">B</span>Was die App ersetzt</div>
+    <div><span class="num-c">C</span>Gesamtliste exportieren und App öffnen</div>
+  </div>
+</section>
+
+<!-- ===================== 4 DER TAG ===================== -->
+<section class="page">
+  <div class="kicker">Überblick</div>
+  <h1>Der Tag in <b>fünf Schritten</b></h1>
+  <p class="lead">Die App führt dich oben über eine Schrittleiste durch den Ablauf. Du arbeitest immer <strong>am Vortag</strong> für den <strong>nächsten Liefertag</strong>.</p>
+
+  <div class="timeline">
+    <div><span class="num-c">1</span><h3>Hochladen</h3><p>Gesamtliste reinziehen, Datum checken</p></div>
+    <div><span class="num-c">2</span><h3>Prüfen</h3><p>erkannte Wünsche ansehen, Unklares entscheiden</p></div>
+    <div><span class="num-c">3</span><h3>Speiseplan</h3><p>wo steckt heute welche Zutat?</p></div>
+    <div><span class="num-c">4</span><h3>Ergebnis</h3><p>Zahlen ansehen, Dateien laden</p></div>
+    <div><span class="num-c num-c--ink" style="border-color:var(--white)">5</span><h3>Abschluss</h3><p>Mails, Etiketten, Kurbrief, QR-Code</p></div>
+  </div>
+
+  <h2 style="margin-top:20pt">Was die App von der alten Anleitung übernimmt</h2>
+  <table class="t">
+    <tr><th style="width:40%">Aufgabe aus der alten Anleitung</th><th class="c" style="width:22%">Früher</th><th>Heute mit der App</th></tr>
+    <tr><td><strong>Gesamtliste anpassen</strong><br><span class="small">Notizen in Spezialwünsche schieben, Irrelevantes löschen</span></td><td class="c">von Hand</td><td>erkennt die App, du prüfst nur Unklares</td></tr>
+    <tr><td><strong>Etikettenliste</strong><br><span class="small">filtern und kopieren</span></td><td class="c">von Hand</td><td class="hl">automatisch</td></tr>
+    <tr><td><strong>Liste Spezialwünsche</strong><br><span class="small">Kürzel eintragen, Früh/Mittag/Abend zählen</span></td><td class="c">von Hand</td><td class="hl">automatisch, Excel und PDF</td></tr>
+    <tr><td><strong>Genaue Mengen</strong><br><span class="small">Werte für „Sortiment neu“</span></td><td class="c">von Hand</td><td class="hl">automatisch, mit Kopier-Knopf</td></tr>
+    <tr><td><strong>Mails</strong> an Gaumenfreundinnen und Goran</td><td class="c">Vorlage + Zahlen</td><td>Text ist fertig ausgefüllt, du schickst ab</td></tr>
+    <tr><td><strong>Etiketten drucken</strong> (Avery 3424)</td><td class="c">von Hand</td><td>Checkliste mit Feldanordnung zum Kopieren</td></tr>
+    <tr><td><strong>AC Kurbrief</strong> und <strong>QR-Code</strong></td><td class="c">von Hand</td><td>Checkliste mit E-Mails, Tag und Suchbegriff zum Kopieren</td></tr>
+  </table>
+
+  <div class="note note--ok">
+    <span class="ic"><svg><use href="#i-check"/></svg></span>
+    <div><p><strong>Dein Fortschritt bleibt gespeichert.</strong> Du kannst die App schließen und später weitermachen. Sie öffnet automatisch den zuletzt bearbeiteten Tag.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 5 VORBEREITUNG ===================== -->
+<section class="page">
+  <div class="kicker">Vorbereitung</div>
+  <h1>Gesamtliste <b>holen</b></h1>
+  <p class="lead">Die App braucht genau eine Datei: den Export der Lieferungen für morgen aus dem Backoffice.</p>
+
+  <div class="steps">
+    <div class="step"><span class="num-c">1</span><div><strong>Backoffice öffnen</strong><p><code>backoffice.basenbox.at/deliveries</code></p></div></div>
+    <div class="step"><span class="num-c">2</span><div><strong>Oben auf „Lieferungen“, dann auf „MORGEN“ klicken</strong><p>Die Überschrift zeigt dann z. B. „44 Lieferungen für den 05.09.“</p></div></div>
+    <div class="step"><span class="num-c">3</span><div><strong>Rechts auf „EXPORT“ und „Lieferanten (Excel)“ klicken</strong><p>Die Datei landet in deinen Downloads.</p></div></div>
+    <div class="step"><span class="num-c">4</span><div><strong>Speichern unter <code>TT.MM. Gesamt.xlsx</code></strong><p>Zum Beispiel <code>09.11. Gesamt.xlsx</code> im aktuellen KW-Ordner. Das Datum im Namen ist das <strong>Lieferdatum</strong>, nicht das heutige.</p></div></div>
+  </div>
+
+  <!-- Mini-Backoffice -->
+  <div class="shot-wrap" style="margin-top:14pt">
+    <div class="screen">
+      <div class="chrome"><i></i><i></i><i></i><span>backoffice.basenbox.at/deliveries</span></div>
+      <div style="padding:10pt 14pt">
+        <div style="display:flex;gap:12pt;font-size:8pt;color:var(--ink);margin-bottom:10pt"><span>Boxen</span><span style="font-weight:700;border-bottom:2pt solid var(--ink)">Lieferungen</span><span class="co in">2</span><span>Bestellungen</span><span>Teilnehmer</span></div>
+        <div style="font-size:11pt;color:var(--ink);margin-bottom:8pt">44 Lieferungen für den 05.09.</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="display:flex;align-items:center;gap:5pt"><div style="display:flex;border:1px solid var(--line);border-radius:6pt;overflow:hidden;font-size:7.5pt;color:var(--ink)"><span style="padding:3pt 8pt">GESTERN</span><span style="padding:3pt 8pt;border-left:1px solid var(--line)">HEUTE</span><span style="padding:3pt 8pt;background:var(--ink);color:var(--white)">MORGEN</span></div><span class="co in">2</span></div>
+          <div style="text-align:right">
+            <div style="display:flex;gap:4pt;font-size:7.5pt"><span style="padding:3pt 8pt;border:1px solid var(--line);border-radius:6pt">FILTER</span><span style="padding:3pt 8pt;background:#4CAF50;color:#fff;border-radius:6pt">DRUCKEN</span><span style="padding:3pt 8pt;background:#4CAF50;color:#fff;border-radius:6pt">EXPORT ▾</span></div>
+            <span class="co in" style="vertical-align:bottom;margin-right:4pt">3</span><div style="display:inline-block;margin-top:4pt;border:1px solid var(--line);border-radius:6pt;font-size:7.5pt;text-align:left;box-shadow:0 3pt 8pt rgba(0,0,0,.1)">
+              <div style="padding:2pt 10pt">CSV</div><div style="padding:2pt 10pt">Excel</div><div style="padding:2pt 10pt;background:#FFF7B8;font-weight:700;color:var(--ink)">Lieferanten (Excel)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>App öffnen</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="ic"><svg><use href="#i-arrow"/></svg></span>Im Browser</h3>
+      <p style="margin:4pt 0 0">Adresse <code>http://localhost:8080</code> eingeben. Am besten als Lesezeichen speichern.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ic ic--coral"><svg><use href="#i-warn"/></svg></span>Seite lädt nicht?</h3>
+      <p style="margin:4pt 0 0">Dann läuft die App gerade nicht. Sag dem Admin Bescheid (siehe Seite „Für den Admin“ am Ende).</p>
+    </div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 6 KAPITEL 02 ===================== -->
+<section class="page page--lemon">
+  <div class="deco" style="width:130mm;height:130mm;background:var(--lime);left:-50mm;bottom:-50mm;opacity:.55"></div>
+  <div class="deco" style="width:34mm;height:34mm;background:var(--white);right:24mm;top:30mm;opacity:.55"></div>
+  <div class="chapter-no">02</div>
+  <div class="chapter-title">Die App Schritt<br>für Schritt</div>
+  <p class="chapter-lead">Fünf Bildschirme, immer in derselben Reihenfolge. Die roten Nummern in den Bildern erklären, worauf du achten musst.</p>
+  <div class="chapter-list">
+    <div><span class="num-c">1</span>Hochladen</div>
+    <div><span class="num-c">2</span>Prüfen</div>
+    <div><span class="num-c">3</span>Speiseplan</div>
+    <div><span class="num-c">4</span>Ergebnis</div>
+    <div><span class="num-c">5</span>Abschluss</div>
+  </div>
+</section>
+
+<!-- ===================== 7 SCHRITT 1 ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 1 von 5</div>
+  <h1>Liste <b>hochladen</b></h1>
+  <p class="lead">Zieh die Datei <code>TT.MM. Gesamt.xlsx</code> in das gestrichelte Feld oder klick hinein, um sie auszuwählen. Nach ein paar Sekunden siehst du, was die App erkannt hat.</p>
+
+  <div class="shot-wrap">
+    <div class="screen">
+      <div class="chrome"><i></i><i></i><i></i><span>localhost:8080</span></div>
+      <div class="appbar"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><span class="trio"><i style="background:var(--lemon);margin-left:0"></i><i style="background:var(--lime)"></i><i style="background:var(--coral)"></i></span><nav><span class="on">Ablauf</span><span>Verlauf</span><span>Einstellungen</span></nav></div>
+      <div class="stepper"><div class="cur"><b>1</b>Hochladen <span class="co in">1</span></div><div><b>2</b>Prüfen</div><div><b>3</b>Speiseplan</div><div><b>4</b>Ergebnis</div><div><b>5</b>Abschluss</div></div>
+      <div class="sbody">
+        <div class="stitle"><div class="k">Schritt 1 · Gesamtliste</div><div class="h">Liste <b>erkannt</b></div><p>Aus „04.11. Gesamt.xlsx“ gelesen. Passt das Lieferdatum?</p></div>
+        <div class="grid3" style="gap:7pt">
+          <div class="scard"><h4><span class="ic"><svg><use href="#i-cal"/></svg></span>Lieferdatum<span class="co in" style="margin-left:auto">2</span></h4><div class="sub">Mittwoch · KW 45</div><div style="margin-top:6pt;border:1px solid var(--line);background:var(--white);border-radius:6pt;padding:3pt 6pt;color:var(--ink)">04.11.2026 &nbsp;📅</div></div>
+          <div class="scard"><h4><span class="ic ic--lime"><svg><use href="#i-box"/></svg></span>Boxen<span class="co in" style="margin-left:auto">3</span></h4><div class="sub">Zeilen mit Bestellnummer</div><div class="big" style="margin-top:4pt">50</div></div>
+          <div class="scard"><h4><span class="ic ic--coral"><svg><use href="#i-spark"/></svg></span>Wünsche<span class="co in" style="margin-left:auto">4</span></h4><div class="sub">automatisch erkannt</div><div class="big" style="margin-top:4pt">9</div><div style="font-size:7pt">Zeilen mit Wunsch · 2 zum Prüfen</div></div>
+        </div>
+        <div style="margin-top:8pt;background:#FDE3E0;border-radius:8pt;padding:5pt 8pt;font-size:7.5pt;color:var(--ink)"><span class="co in">5</span> ⚠ Titelzeile nennt 51 Boxen, gezählt sind 50 Zeilen mit Bestellnummer.</div>
+        <div class="sactions"><span class="btn btn--ghost">↺ Andere Liste</span><span style="display:flex;gap:5pt;align-items:center"><span class="co in">6</span><span class="btn btn--lemon">Weiter zum Prüfen <svg><use href="#i-arrow"/></svg></span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="row"><span class="co">1</span><p><strong>Die Schrittleiste</strong> zeigt, wo du gerade bist. Erledigte Schritte kannst du jederzeit wieder anklicken.</p></div>
+    <div class="row"><span class="co">2</span><p><strong>Lieferdatum:</strong> Die App liest es aus dem Dateinamen. Stimmt es nicht, wähl hier das richtige Datum. Wochentag und Kalenderwoche passen sich an.</p></div>
+    <div class="row"><span class="co">3</span><p><strong>Boxen</strong> = Anzahl der Zeilen mit Bestellnummer. Diese Zahl ist die Basis für alle Mahlzeiten.</p></div>
+    <div class="row"><span class="co">4</span><p><strong>Wünsche:</strong> wie viele Personen einen Spezialwunsch haben und wie viele Fälle du gleich kurz ansehen musst.</p></div>
+    <div class="row"><span class="co">5</span><p><strong>Hinweise in Rot:</strong> z. B. wenn die Boxenzahl in der Titelzeile nicht zur gezählten Zahl passt. Dann lohnt ein Blick ins Backoffice.</p></div>
+    <div class="row"><span class="co">6</span><p><strong>Weiter zum Prüfen.</strong> Falsche Datei erwischt? Dann „Andere Liste“.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 8 SCHRITT 2a ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 2 von 5</div>
+  <h1>Wünsche <b>prüfen</b></h1>
+  <p class="lead">Die App liest jede Notiz und jeden Spezialwunsch. Meistens ist alles eindeutig. Wenn sie sich nicht sicher ist, fragt sie dich.</p>
+
+  <h2>Oben: Was braucht deinen Blick?</h2>
+  <div class="shot-wrap">
+    <div class="screen">
+      <div class="sbody" style="padding-top:12pt">
+        <div class="scard">
+          <h4><span class="ic ic--coral"><svg><use href="#i-eye"/></svg></span>2 Wünsche brauchen deinen Blick</h4>
+          <div class="sub">Sie zählen erst, wenn du entschieden hast.</div>
+          <div style="background:var(--white);border-radius:8pt;padding:7pt 9pt;margin-top:7pt">
+            <div style="font-size:7pt">Anna Beispiel · Notizen</div>
+            <div style="font-size:9pt;color:var(--ink);font-style:italic;margin:2pt 0">„bitte ohne Koriander“ <span class="co in">1</span></div>
+            <div style="font-size:7pt">Klingt nach einem Wunsch, aber keine Regel passt.</div>
+            <div style="display:flex;gap:5pt;margin-top:6pt;align-items:center">
+              <span class="co in">2</span><span style="border:1px solid var(--line);border-radius:6pt;padding:2pt 8pt;color:var(--ink);white-space:nowrap">Übernehmen als … ▾</span>
+              <span class="co in" style="margin-left:4pt">3</span><span class="btn"><svg><use href="#i-check"/></svg>Übernehmen</span>
+              <span class="co in" style="margin-left:4pt">4</span><span class="btn btn--ghost">＋ Eigener Wunsch</span>
+              <span class="co in" style="margin-left:4pt">5</span><span class="btn btn--ghost"><svg><use href="#i-x"/></svg>Ignorieren</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="row"><span class="co">1</span><p><strong>Der Originaltext</strong> aus Notizen oder Spezialwünschen, darunter der Grund, warum die App nachfragt.</p></div>
+    <div class="row"><span class="co">2</span><p><strong>Übernehmen als …:</strong> Passt der Text zu einer bekannten Regel (z. B. „Ohne Mittag“), wähl sie hier aus.</p></div>
+    <div class="row"><span class="co">3</span><p><strong>Übernehmen:</strong> bestätigt deine Wahl. Ab jetzt zählt der Wunsch mit.</p></div>
+    <div class="row"><span class="co">4</span><p><strong>Eigener Wunsch:</strong> für alles, was die Küche wissen muss, aber nicht mitgezählt wird, z. B. „ohne Koriander“. Er steht dann auf Etikett und Spezialwunsch-Liste.</p></div>
+    <div class="row"><span class="co">5</span><p><strong>Ignorieren:</strong> wenn der Text fürs Essen keine Rolle spielt.</p></div>
+  </div>
+
+  <div class="note note--tip" style="margin-top:12pt">
+    <span class="ic"><svg><use href="#i-bulb"/></svg></span>
+    <div><p><strong>Wann fragt die App nach?</strong> Wenn ein Text nach Wunsch klingt („ohne“, „kein“, „Allergie“, „unverträglich“, „statt“, „extra“), aber keine Regel passt. Oder wenn ein Datum drinsteht, das nicht zum Liefertag passt, z. B. „ab 12.11. ohne Frühstück“.</p></div>
+  </div>
+  <div class="note note--warn">
+    <span class="ic"><svg><use href="#i-warn"/></svg></span>
+    <div><p><strong>Allergien ernst nehmen.</strong> Bei einer Allergie das betroffene Gericht tauschen. Im Zweifel die Person anrufen und fragen, so wie bisher.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 9 SCHRITT 2b ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 2 von 5 · Fortsetzung</div>
+  <h1>Die <b>Zeilen</b></h1>
+  <p class="lead">Unter den offenen Fällen steht jede Person mit ihren erkannten Wünschen. Die farbigen „Chips“ zeigen auf einen Blick, was erkannt wurde.</p>
+
+  <div class="shot-wrap">
+    <div class="screen">
+      <div class="sbody" style="padding-top:12pt">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6pt">
+          <strong style="font-size:10pt">Zeilen</strong>
+          <div style="display:flex;gap:4pt;font-size:7pt"><span class="co in">1</span><span class="pill">Alle 50</span><span class="pill pill--lemon">Mit Wunsch 9</span><span class="pill">Zu prüfen 2</span></div>
+        </div>
+        <table class="stable">
+          <tr><th style="width:28%">Teilnehmer</th><th>Erkannte Wünsche</th><th style="width:18%">Status</th></tr>
+          <tr><td><strong style="color:var(--ink)">Max Muster</strong><br>#1042</td><td><span class="chip chip--M">Ohne Mittag</span> <span class="chip chip--A">2x Abend</span> <span class="co in">2</span></td><td><span class="pill">auto</span> ✎ <span class="co in">4</span></td></tr>
+          <tr><td><strong style="color:var(--ink)">Lena Probe</strong><br>#1043</td><td><span class="chip chip--F">Ohne Nüsse · Früh</span> <span class="chip chip--A">Ohne Z&amp;K · Abend</span>
+            <div style="margin-top:4pt;background:var(--ink);color:var(--white);border-radius:6pt;padding:4pt 6pt;font-size:7pt"><span class="co in" style="border:0;margin-right:3pt">3</span><strong style="color:var(--white)">Nüsse</strong> · Regel „n(ü|u)ss“ trifft in Spezialwünsche<br>Originaltext: „Bitte ohne Nüsse“</div></td><td><span class="pill">auto</span> ✎</td></tr>
+          <tr><td><strong style="color:var(--ink)">Paul Test</strong><br>#1047</td><td><span class="chip chip--addon">Bitterstoffe</span> <span class="chip chip--custom">ohne Koriander</span></td><td><span class="pill pill--lime">manuell</span> ✎</td></tr>
+          <tr><td><strong style="color:var(--ink)">Sophie Beispiel</strong><br>#1051</td><td><span style="font-size:7pt">wartet auf deine Entscheidung (oben)</span></td><td><span class="pill pill--coral">prüfen</span> ✎</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="row"><span class="co">1</span><p><strong>Filter:</strong> „Mit Wunsch“ ist voreingestellt. „Alle“ zeigt jede Box, „Zu prüfen“ nur die offenen Fälle.</p></div>
+    <div class="row"><span class="co">2</span><p><strong>Chips:</strong> Klick auf einen Chip zeigt, <em>warum</em> er erkannt wurde, mit Originaltext. Mit dem kleinen × entfernst du einen falsch erkannten Wunsch.</p></div>
+    <div class="row"><span class="co">3</span><p><strong>Die Begründung</strong> nennt Regel, Suchwort, Spalte und den Originaltext.</p></div>
+    <div class="row"><span class="co">4</span><p><strong>Status und Stift:</strong> Mit dem Stift ✎ bearbeitest du eine Zeile (siehe unten).</p></div>
+  </div>
+
+  <div class="grid2" style="margin-top:12pt">
+    <div class="card">
+      <h3>Die Farben der Chips</h3>
+      <div style="display:grid;gap:5pt;margin-top:6pt;font-size:9pt">
+        <div><span class="chip chip--F">grün</span> betrifft das Frühstück</div>
+        <div><span class="chip chip--M">orange</span> betrifft das Mittagessen</div>
+        <div><span class="chip chip--A">blau</span> betrifft das Abendessen</div>
+        <div><span class="chip chip--addon">rot</span> Add-on, z. B. Bitterstoffe, Kreatin</div>
+        <div><span class="chip chip--custom">gestrichelt</span> eigener Wunsch</div>
+        <div><span class="chip chip--muted">grau</span> heute nicht relevant</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Status und Zeile bearbeiten</h3>
+      <div style="display:grid;gap:5pt;margin-top:6pt;font-size:9pt">
+        <div><span class="pill" style="background:var(--white)">auto</span> von der App erkannt</div>
+        <div><span class="pill pill--lime">manuell</span> von dir geändert</div>
+        <div><span class="pill pill--coral">prüfen</span> wartet auf dich</div>
+      </div>
+      <p style="margin-top:8pt;font-size:9pt">Mit dem <strong>Stift</strong> klickst du ein Stück aus den Notizen zum Spezialwunsch (so wie früher „von Notiz nach Spezialwünsche verschieben“), fügst eine Regel hinzu oder holst eine entfernte zurück.</p>
+    </div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 10 SCHRITT 3 ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 3 von 5</div>
+  <h1>Speise<b>plan</b></h1>
+  <p class="lead">„Ohne Nüsse“ ist nur wichtig, wenn heute auch Nüsse im Essen sind. Darum sagst du der App, in welcher Mahlzeit welche Zutat steckt. Schau dafür in den Speiseplan des Tages.</p>
+
+  <div class="shot-wrap">
+    <div class="screen">
+      <div class="sbody" style="padding-top:12pt">
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:8pt">
+          <div class="scard">
+            <h4><span class="ic"><svg><use href="#i-food"/></svg></span>Zutaten heute</h4>
+            <div class="sub">Vorbelegt mit deiner letzten Auswahl für Mittwoch. <span class="co in">2</span></div>
+            <div style="display:grid;gap:5pt;margin-top:7pt">
+              <div style="background:var(--white);border-radius:7pt;padding:5pt 7pt;display:flex;justify-content:space-between;align-items:center"><div><strong style="color:var(--ink)">Nüsse</strong><div style="font-size:6.5pt">4 Personen wünschen ohne</div></div><span style="display:flex;gap:4pt;align-items:center"><span class="seg"><span class="F">Früh</span><span>Mittag</span><span>Abend</span><span>keine</span></span><span class="co in">1</span></span></div>
+              <div style="background:var(--white);border-radius:7pt;padding:5pt 7pt;display:flex;justify-content:space-between;align-items:center"><div><strong style="color:var(--ink)">Z&amp;K</strong><div style="font-size:6.5pt">5 Personen wünschen ohne</div></div><span class="seg"><span>Früh</span><span>Mittag</span><span class="A">Abend</span><span>keine</span></span></div>
+              <div style="background:var(--white);border-radius:7pt;padding:5pt 7pt;display:flex;justify-content:space-between;align-items:center"><div><strong style="color:var(--ink)">Rosinen</strong><div style="font-size:6.5pt">0 Personen wünschen ohne</div></div><span class="seg"><span>Früh</span><span>Mittag</span><span>Abend</span><span class="N">keine</span></span></div>
+            </div>
+          </div>
+          <div class="scard scard--white">
+            <h4>Vorschau<span class="co in" style="margin-left:auto">3</span></h4><div style="font-size:7pt">aktualisiert sich live</div>
+            <div style="display:grid;gap:6pt;margin-top:7pt">
+              <div style="display:flex;gap:6pt;align-items:center"><span class="ic" style="width:20pt;height:20pt;background:var(--meal-F);font-weight:700;font-size:8pt">49</span><div><strong style="color:var(--ink)">Frühstück</strong><div style="font-size:6.5pt">4× ohne Nüsse</div></div></div>
+              <div style="display:flex;gap:6pt;align-items:center"><span class="ic" style="width:20pt;height:20pt;background:var(--meal-M);font-weight:700;font-size:8pt">49</span><div><strong style="color:var(--ink)">Mittag</strong><div style="font-size:6.5pt">keine Sonderportionen</div></div></div>
+              <div style="display:flex;gap:6pt;align-items:center"><span class="ic" style="width:20pt;height:20pt;background:var(--meal-A);font-weight:700;font-size:8pt">52</span><div><strong style="color:var(--ink)">Abend</strong><div style="font-size:6.5pt">5× ohne Z&amp;K</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="sactions"><span class="btn btn--ghost">← Zurück</span><span style="display:flex;gap:5pt;align-items:center"><span class="co in">4</span><span class="btn btn--lemon"><svg><use href="#i-file"/></svg>Dateien erzeugen</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="row"><span class="co">1</span><p><strong>Pro Zutat die Mahlzeit wählen:</strong> Früh, Mittag, Abend (auch mehrere) oder <strong>keine</strong>, wenn die Zutat heute nirgends drin ist. Wünsche zu dieser Zutat zählen dann nicht und fliegen aus der Gesamtliste raus.</p></div>
+    <div class="row"><span class="co">2</span><p><strong>Vorbelegt:</strong> Die App merkt sich deine Auswahl pro Wochentag. Kontrollier trotzdem jedes Mal kurz, ob der Speiseplan diese Woche gleich ist.</p></div>
+    <div class="row"><span class="co">3</span><p><strong>Vorschau:</strong> Die Zahlen ändern sich sofort, wenn du etwas umstellst.</p></div>
+    <div class="row"><span class="co">4</span><p><strong>Dateien erzeugen</strong> geht erst, wenn jede Zutat eine Auswahl hat. Danach springt die App zum Ergebnis.</p></div>
+  </div>
+
+  <div class="note note--tip" style="margin-top:12pt">
+    <span class="ic"><svg><use href="#i-bulb"/></svg></span>
+    <div><p><strong>Beispiel:</strong> Heute sind Nüsse nur im Frühstücks-Porridge. Dann wählst du bei Nüsse nur „Früh“. „Ohne Nüsse“ wird nur beim Frühstück gezählt, Mittag und Abend bleiben normal.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 11 SCHRITT 4 ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 4 von 5</div>
+  <h1>Dein <b>Ergebnis</b></h1>
+  <p class="lead">Hier stehen alle Zahlen des Tages. Jede Zahl kannst du anklicken: Die App zeigt dir dann genau, aus welchen Personen und Wünschen sie entsteht.</p>
+
+  <div class="shot-wrap">
+    <div class="screen">
+      <div class="sbody" style="padding-top:12pt">
+        <div class="grid3" style="gap:7pt">
+          <div class="hero" style="background:var(--meal-F)"><div class="l" style="display:flex;justify-content:space-between">Frühstück<span class="co in">1</span></div><div class="v">49</div><div class="s">50 Boxen −1</div></div>
+          <div class="hero" style="background:var(--meal-M)"><div class="l">Mittag</div><div class="v">49</div><div class="s">50 Boxen −1</div></div>
+          <div class="hero" style="background:var(--meal-A);outline:2pt solid var(--ink)"><div class="l">Abend</div><div class="v">52</div><div class="s">50 Boxen +1 +1</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6pt;margin-top:6pt">
+          <div class="scard" style="padding:5pt 7pt"><div style="font-size:13pt;font-weight:700;color:var(--green);display:flex;justify-content:space-between;align-items:center">4<span class="co in">2</span></div><div style="font-size:6.5pt">Ohne Nüsse · Frühstück</div></div>
+          <div class="scard" style="padding:5pt 7pt"><div style="font-size:13pt;font-weight:700;color:var(--green)">5</div><div style="font-size:6.5pt">Ohne Z&amp;K · Abend</div></div>
+          <div class="scard" style="padding:5pt 7pt"><div style="font-size:13pt;font-weight:700;color:var(--green)">2</div><div style="font-size:6.5pt">Bitterstoffe</div></div>
+          <div class="scard" style="padding:5pt 7pt"><div style="font-size:13pt;font-weight:700;color:var(--green)">1</div><div style="font-size:6.5pt">Kreatin</div></div>
+        </div>
+        <div class="scard scard--white" style="margin-top:6pt">
+          <div style="font-size:6pt;letter-spacing:.18em;font-weight:700;text-transform:uppercase">Herleitung</div>
+          <strong style="color:var(--ink)">Abend: 52</strong> <span class="co in">3</span>
+          <div style="font-size:7pt;margin-top:2pt">• 50 Boxen (eine Portion pro Box)<br>• <strong style="color:var(--ink)">+1</strong> Mehrfach Abend: Max Muster · #1042<br>• <strong style="color:var(--ink)">+1</strong> Mehrfach Abend: Jonas Probe · #1049<br>• davon normal 47 · ohne Z&amp;K 5 · Check 0</div>
+        </div>
+        <div style="margin-top:6pt;background:#FFF7B8;border-radius:8pt;padding:5pt 8pt;font-size:7.5pt;color:var(--ink)"><span class="co in">4</span> 🌾 <strong>Brot:</strong> Heute ist Dienstag: trag 49 als Brotmenge für Donnerstag ein.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="row"><span class="co">1</span><p><strong>Die drei großen Zahlen</strong> sind die Mahlzeiten für morgen. Darunter steht kurz, wie sie entstehen: 50 Boxen, minus „Ohne“, plus „2x“.</p></div>
+    <div class="row"><span class="co">2</span><p><strong>Kleine Zahlen:</strong> Sonderportionen (ohne Nüsse, ohne Zwiebel &amp; Knoblauch) und Add-ons wie Bitterstoffe oder Kreatin.</p></div>
+    <div class="row"><span class="co">3</span><p><strong>Herleitung:</strong> erscheint, wenn du auf eine Zahl klickst. So kannst du jede Zahl nachvollziehen, ohne selbst zu rechnen.</p></div>
+    <div class="row"><span class="co">4</span><p><strong>Brot-Hinweis:</strong> Arbeitest du am Sonntag oder Dienstag, erinnert dich die App, die Frühstückszahl als Brotmenge für Dienstag bzw. Donnerstag einzutragen.</p></div>
+  </div>
+
+  <div class="note note--warn" style="margin-top:12pt">
+    <span class="ic"><svg><use href="#i-warn"/></svg></span>
+    <div><p><strong>Gelber oder roter Hinweis oben?</strong> Dann sind noch Wünsche offen. Die Dateien gibt es trotzdem, aber offene Fälle zählen nicht mit. Klick auf „Zum Prüfen“, entscheide, und erzeuge die Dateien neu.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 12 SCHRITT 4b ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 4 von 5 · Fortsetzung</div>
+  <h1>Dateien und <b>Sortiment neu</b></h1>
+  <p class="lead">Weiter unten im Ergebnis liegen alle Dateien des Tages zum Herunterladen. Speichere sie wie gewohnt im KW-Ordner.</p>
+
+  <p>Mit <span class="btn"><svg><use href="#i-download"/></svg>Alles als ZIP</span> lädst du alle auf einmal. <span class="btn btn--ghost">↻ Neu erzeugen</span> brauchst du, wenn du nachträglich etwas geändert hast.</p>
+
+  <h2>Welche Datei ist wofür?</h2>
+  <table class="t">
+    <tr><th style="width:36%">Datei</th><th>Wofür</th><th style="width:22%">Geht an</th></tr>
+    <tr><td><strong>TT.MM. Gesamt</strong> <span class="small">(Excel)</span></td><td>Alle Lieferungen. Relevante Spezialwünsche stehen fett in der letzten Spalte.</td><td>Goran (Mail-Anhang)</td></tr>
+    <tr><td><strong>TT.MM. Etikettenliste</strong> <span class="small">(Excel)</span></td><td>Nur Personen mit Spezialwunsch, fertig für den Etikettendruck.</td><td>Avery Zweckform</td></tr>
+    <tr><td><strong>TT.MM. Spezialwünsche</strong> <span class="small">(Excel + PDF)</span></td><td>Wünsche verteilt auf Früh / Mittag / Abend mit Summen.</td><td>Gaumenfreundinnen (PDF)</td></tr>
+    <tr><td><strong>TT.MM. genaue Menge</strong> <span class="small">(Excel + PDF)</span></td><td>Gesamt, Normal, Ohne Nuss, Ohne Z &amp; K pro Mahlzeit, mit Check.</td><td>Küche / Rezeptdatei</td></tr>
+  </table>
+
+  <h2>Sortiment neu: Zahlen in die Rezeptdatei</h2>
+  <p>Früher hast du die Mengen von Hand in die Tabelle „Sortiment neu“ der Rezeptdatei getippt. Jetzt klickst du im Ergebnis auf <span class="btn btn--ghost">Als Tabelle kopieren</span> und fügst in der Rezeptdatei beim richtigen Tag ein.</p>
+  <table class="t" style="margin-top:6pt">
+    <tr><th>F/M/A</th><th>Wochentag</th><th class="c">Anzahl Gesamt</th><th class="c">Anzahl Normal</th><th class="c">Ohne Nuss</th><th class="c">Ohne Z &amp; K</th></tr>
+    <tr><td><span class="chip chip--A">Abend</span></td><td>Mittwoch</td><td class="c">52</td><td class="c">47</td><td class="c muted">–</td><td class="c">5</td></tr>
+    <tr><td><span class="chip chip--F">Frühstück</span></td><td>Mittwoch</td><td class="c">49</td><td class="c">45</td><td class="c">4</td><td class="c muted">–</td></tr>
+    <tr><td><span class="chip chip--M">Mittag</span></td><td>Mittwoch</td><td class="c">49</td><td class="c">49</td><td class="c muted">–</td><td class="c muted">–</td></tr>
+  </table>
+  <p class="small" style="margin-top:6pt">Reihenfolge wie in der Rezeptdatei. Ein Strich heißt: Zutat ist heute nicht in dieser Mahlzeit.</p>
+
+  <div class="note note--ok">
+    <span class="ic"><svg><use href="#i-check"/></svg></span>
+    <div><p><strong>Der Check in der Rezeptdatei muss grün bleiben.</strong> Die App rechnet so, dass er immer aufgeht (Check = 0). Ist er doch rot, schau ins Kapitel „Häufige Fragen“.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 13 SCHRITT 5a ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 5 von 5</div>
+  <h1>Fast <b>geschafft</b></h1>
+  <p class="lead">Was die App nicht selbst erledigen kann, findest du hier als Checkliste. Hak jeden Punkt ab, wenn er erledigt ist. Ein Fortschrittsbalken zeigt, wie viel noch fehlt.</p>
+
+  <div class="grid2" style="grid-template-columns:1fr 1fr;align-items:start">
+    <div class="card">
+      <h3><span class="ic"><svg><use href="#i-mail"/></svg></span>Mails</h3>
+      <p class="small" style="margin:2pt 0 8pt">Gaumenfreundinnen und Goran</p>
+      <p>Betreff und Text sind schon mit den Zahlen des Tages ausgefüllt.</p>
+      <ul class="bul">
+        <li><span class="btn">Im Mailprogramm öffnen</span> öffnet eine fertige Mail.</li>
+        <li>Oder Betreff und Text mit dem Kopier-Knopf übernehmen.</li>
+        <li><strong>Goran</strong> bekommt die <strong>Gesamtliste</strong> als Anhang.</li>
+        <li><strong>Gaumenfreundinnen</strong> bekommen das <strong>Spezialwünsche-PDF</strong>.</li>
+      </ul>
+      <p class="small">Den Anhang kannst du direkt unter der Mail herunterladen. Anhängen musst du ihn selbst.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ic"><svg><use href="#i-tag"/></svg></span>Etiketten drucken</h3>
+      <p class="small" style="margin:2pt 0 8pt">Avery Zweckform · Vorlage 3424</p>
+      <div class="steps" style="gap:6pt">
+        <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">1</span><div>Avery öffnen, Vorlage <strong>3424</strong>, Schritt „Anpassen“</div></div>
+        <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">2</span><div>Links <strong>Daten importieren</strong> → <strong>Import / Seriendruck starten</strong> → Etikettenliste hochladen</div></div>
+        <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">3</span><div>Häkchen bei der <strong>ersten Zeile entfernen</strong> (Kopfzeile)</div></div>
+        <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">4</span><div>Felder anordnen wie rechts, mit Leerzeile vor den Spezialwünschen</div></div>
+        <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">5</span><div>Fertig stellen → Vorschau &amp; Drucken</div></div>
+        <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">6</span><div>Herunterladen, speichern als <code>TT.MM. Etiketten</code></div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>So sieht die Feldanordnung aus</h2>
+  <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:12pt;align-items:center">
+    <div style="background:var(--white);border:1px solid var(--line);border-radius:12pt;padding:14pt 18pt;font-size:11pt;color:var(--ink);line-height:1.6;box-shadow:0 6pt 18pt rgba(26,26,26,.08)">
+      Teilnehmer<br>Strasse Hausnummer/Stiege/Tür<br>PLZ<br><span class="muted small">(Leerzeile)</span><br><strong>Spezialwünsche</strong>
+    </div>
+    <div>
+      <p>Die App zeigt dir genau diese Anordnung mit einem <strong>Kopier-Knopf</strong>. Du musst sie nicht abschreiben.</p>
+      <p>Auch den Dateinamen für die Etiketten kannst du dort kopieren.</p>
+    </div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 14 SCHRITT 5b ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 5 von 5 · Fortsetzung</div>
+  <h1>Der <b>Kurbrief</b></h1>
+  <p class="lead">Der Kurbrief geht über ActiveCampaign (kurz AC) an alle, die morgen beliefert werden. Alle Werte zum Kopieren stehen in der Checkliste.</p>
+
+  <div class="card" style="margin-bottom:10pt">
+    <h3><span class="ic"><svg><use href="#i-send"/></svg></span>AC Kurbrief · Versand 11:00</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6pt 16pt;margin-top:8pt">
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">1</span><div><strong>E-Mail-Adressen kopieren</strong> (ein Klick, eine pro Zeile)</div></div>
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">6</span><div><strong>Contacts</strong> nach dem Tag filtern → <strong>Edit all</strong> → Add to a list <code>V_Kurbrief</code> → Apply</div></div>
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">2</span><div>AC: <strong>Contacts → Import → „Copy and paste your contacts“</strong> → einfügen → Next</div></div>
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">7</span><div><strong>Campaigns</strong> → Kurbrief mit Suchbegriff finden → Continue</div></div>
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">3</span><div>„Select lists“: <code>V_Kurbrief</code></div></div>
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">8</span><div>Subscribed to: <code>V_Kurbrief</code> · Send to: der Tag mit Datum</div></div>
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">4</span><div>„Add tags“: z. B. <code>V_Kurbrief_26.11.04</code></div></div>
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">9</span><div><strong>Schedule:</strong> Datum wählen, <strong>11:00 Uhr</strong> → Set schedule → Finish</div></div>
+      <div class="step"><span class="num-c" style="width:18pt;height:18pt;font-size:8pt">5</span><div>„Update existing contacts“ ankreuzen → Import → warten auf „Import complete!“</div></div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-bottom:6pt">
+    <div class="note note--tip" style="margin:0">
+      <span class="ic"><svg><use href="#i-bulb"/></svg></span>
+      <div><p><strong>Zahl vergleichen:</strong> Die Checkliste nennt, wie viele Kontakte es sein müssen. „Edit all“ und „Calculate recipients“ müssen genau diese Zahl zeigen.</p></div>
+    </div>
+    <div class="note note--tip" style="margin:0">
+      <span class="ic"><svg><use href="#i-bulb"/></svg></span>
+      <div><p><strong>Testmail:</strong> Wer sicher gehen will, schickt vor „Finish“ über „Test and preview“ eine Testmail an die Support-Mail.</p></div>
+    </div>
+  </div>
+
+  <h2>Datumsformate in AC: drei verschiedene!</h2>
+  <table class="t">
+    <tr><th>Wo</th><th>Format</th><th class="hl">Beispiel für Lieferung am 04.11.2026</th></tr>
+    <tr><td>Tag beim Import</td><td><code>V_Kurbrief_JJ.MM.TT</code></td><td class="hl"><code>V_Kurbrief_26.11.04</code></td></tr>
+    <tr><td>Kampagne suchen</td><td><code>TT.MM.JJJJ</code></td><td class="hl"><code>04.11.2026</code></td></tr>
+    <tr><td>Liste (Subscribed to)</td><td>ohne Datum</td><td class="hl"><code>V_Kurbrief</code></td></tr>
+    <tr><td>Versandzeit</td><td>immer</td><td class="hl">11:00 Uhr</td></tr>
+  </table>
+  <p class="small" style="margin-top:4pt">Keine Sorge: Die App setzt alle drei richtig zusammen. Du kopierst nur.</p>
+
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== QR-CODE ===================== -->
+<section class="page">
+  <div class="kicker">Schritt 5 von 5 · Letzter Punkt</div>
+  <h1>QR-Code <b>Basenbrief</b></h1>
+  <p class="lead">Der gedruckte Basenbrief hat einen QR-Code. Er soll immer auf den aktuellen Kurbrief zeigen. Darum tauschst du jeden Tag den Link dahinter aus.</p>
+
+  <div class="steps" style="gap:10pt">
+    <div class="step"><span class="num-c">1</span><div><strong>Link holen</strong><p>In AC: Campaign → Kurbrief mit heutigem Datum → View Report → Message → Globus-Symbol „View the web copy“ → Link kopieren.</p></div></div>
+    <div class="step"><span class="num-c">2</span><div><strong>QR-Code-Generator öffnen</strong><p>Über den Knopf in der App. Zugangsdaten stehen im Passwortmanager.</p></div></div>
+    <div class="step"><span class="num-c">3</span><div><strong>Nur den Stift benutzen</strong><p>Beim Eintrag „Basenbrief digital“ auf den Stift (Inhalt bearbeiten) → neuen Link einfügen → speichern.</p></div></div>
+    <div class="step"><span class="num-c">4</span><div><strong>Testen</strong><p>QR-Code mit dem Handy scannen. Öffnet sich der Kurbrief von heute? Fertig.</p></div></div>
+  </div>
+
+  <div class="shot-wrap" style="margin-top:14pt">
+    <div class="screen">
+      <div class="chrome"><i></i><i></i><i></i><span>app.qr-code-generator.com</span></div>
+      <div style="padding:12pt 14pt;display:flex;gap:14pt;align-items:center">
+        <div style="width:58pt;height:58pt;border-radius:6pt;background:repeating-conic-gradient(var(--ink) 0 25%, var(--white) 0 50%) 0 0/12pt 12pt;border:4pt solid var(--white);outline:1px solid var(--line);flex:none"></div>
+        <div style="flex:1">
+          <div style="font-size:7pt">Webseite (URL)</div>
+          <div style="font-size:11pt;color:var(--ink);font-weight:700">Basenbrief digital</div>
+          <div style="font-size:7.5pt">qrco.de/… → Link zum Kurbrief</div>
+        </div>
+        <div style="display:flex;gap:6pt;align-items:center">
+          <span class="btn btn--ghost">Download</span>
+          <span class="co in">3</span>
+          <span class="ic" style="width:22pt;height:22pt;outline:2pt solid var(--coral)"><svg style="width:11pt;height:11pt"><use href="#i-pencil"/></svg></span>
+          <span class="ic" style="width:22pt;height:22pt;background:var(--mist);opacity:.5">⋮</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note note--warn">
+    <span class="ic"><svg><use href="#i-warn"/></svg></span>
+    <div><p><strong>ACHTUNG:</strong> Den QR-Code <strong>nie löschen oder ändern</strong>. Er ist schon gedruckt. Nur den hinterlegten Link tauschen.</p></div>
+  </div>
+  <div class="note note--warn">
+    <span class="ic"><svg><use href="#i-warn"/></svg></span>
+    <div><p><strong>ACHTUNG:</strong> Immer kontrollieren, ob der QR-Code funktioniert.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 15 FERTIG ===================== -->
+<section class="page" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+  <div class="deco" style="width:120mm;height:120mm;background:var(--orange);right:-40mm;top:-30mm;opacity:.5"></div>
+  <div class="deco" style="width:80mm;height:80mm;background:var(--lime);left:-30mm;bottom:-20mm;opacity:.6"></div>
+  <div style="background:var(--lemon);border-radius:24pt;padding:30mm 20mm;width:150mm">
+    <span class="ic ic--white" style="width:60pt;height:60pt;margin-bottom:14pt"><svg style="width:30pt;height:30pt"><use href="#i-party"/></svg></span>
+    <div style="font-size:30pt;color:var(--ink);text-transform:uppercase;letter-spacing:.04em">Super<b>rrr geschafft!</b></div>
+    <p style="font-size:13pt;color:var(--ink);margin-top:10pt">Sind alle Haken gesetzt, feiert die App mit dir. Der Liefertag ist vorbereitet.</p>
+  </div>
+  <p style="margin-top:16mm;max-width:130mm">Morgen geht es wieder bei Schritt 1 los: Klick oben auf <strong>Verlauf</strong> und dann auf <strong>Neuer Tag</strong>, oder lade einfach die nächste Gesamtliste hoch.</p>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 16 KAPITEL 03 ===================== -->
+<section class="page page--lemon">
+  <div class="deco" style="width:110mm;height:110mm;background:var(--coral);right:-36mm;bottom:-36mm;opacity:.35"></div>
+  <div class="deco" style="width:30mm;height:30mm;background:var(--white);left:120mm;top:40mm;opacity:.55"></div>
+  <div class="chapter-no">03</div>
+  <div class="chapter-title">Gut zu wissen</div>
+  <p class="chapter-lead">Du musst nicht wissen, wie die App rechnet, um sie zu benutzen. Aber es hilft, wenn dir eine Zahl komisch vorkommt.</p>
+  <div class="chapter-list">
+    <div><span class="num-c">A</span>So rechnet die App</div>
+    <div><span class="num-c">B</span>Wie die App Wünsche erkennt</div>
+    <div><span class="num-c">C</span>Verlauf und Einstellungen</div>
+  </div>
+</section>
+
+<!-- ===================== 17 RECHNEN ===================== -->
+<section class="page">
+  <div class="kicker">Hintergrund</div>
+  <h1>So <b>rechnet</b> die App</h1>
+  <p class="lead">Jede Box bekommt eine Portion pro Mahlzeit. Spezialwünsche ziehen etwas ab oder legen etwas drauf.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12pt;align-items:start">
+    <table class="t">
+      <tr><th>Wunsch</th><th class="c">Kürzel</th><th class="c">Wirkung</th></tr>
+      <tr><td>Ohne Frühstück</td><td class="c"><strong>OF</strong></td><td class="c">Früh −1</td></tr>
+      <tr><td>Ohne Mittagessen</td><td class="c"><strong>OM</strong></td><td class="c">Mittag −1</td></tr>
+      <tr><td>Ohne Abendessen</td><td class="c"><strong>OA</strong></td><td class="c">Abend −1</td></tr>
+      <tr><td>2x Frühstück / Mittag / Abend</td><td class="c">–</td><td class="c">+1</td></tr>
+      <tr><td>3x Frühstück / Mittag / Abend</td><td class="c">–</td><td class="c">+2</td></tr>
+      <tr><td>Ohne Nüsse</td><td class="c"><strong>ON</strong></td><td class="c">Sonderportion</td></tr>
+      <tr><td>Ohne Zwiebel &amp; Knoblauch</td><td class="c"><strong>ZK</strong></td><td class="c">Sonderportion</td></tr>
+    </table>
+    <div>
+      <div class="note note--tip" style="margin-top:0">
+        <span class="ic"><svg><use href="#i-bulb"/></svg></span>
+        <div><p><strong>Kürzel nur in Großbuchstaben.</strong> „OM“ wird erkannt, „om“ nicht. Sonst würde jedes „on“ oder „om“ in einem normalen Satz mitzählen.</p></div>
+      </div>
+      <p>Ausgeschriebene Wünsche erkennt die App in vielen Varianten: „ohne Mittag“, „kein Mittagessen“, „2 x Abend“, „Knofi“, „Z&amp;K“ … Umlaute und Groß-/Kleinschreibung sind egal.</p>
+    </div>
+  </div>
+
+  <h2>Rechenbeispiel mit 50 Boxen</h2>
+  <div class="grid3" style="margin-top:8pt">
+    <div class="hero" style="background:var(--meal-F)"><div class="l">Frühstück</div><div class="v">49</div><div class="s" style="font-size:9pt">50 − 1 (eine Person OF)</div></div>
+    <div class="hero" style="background:var(--meal-M)"><div class="l">Mittag</div><div class="v">49</div><div class="s" style="font-size:9pt">50 − 1 (eine Person OM)</div></div>
+    <div class="hero" style="background:var(--meal-A)"><div class="l">Abend</div><div class="v">52</div><div class="s" style="font-size:9pt">50 + 1 + 1 (zwei Personen „2x Abend“)</div></div>
+  </div>
+
+  <h2>Ohne-Wünsche zählen nur dort, wo die Zutat drin ist</h2>
+  <p>„Ohne Nüsse“ zählt nur in den Mahlzeiten, die du im Speiseplan bei Nüsse ausgewählt hast. Steht eine Zutat heute bei <strong>keine</strong>, ist der Wunsch nicht relevant und wird aus der Gesamtliste entfernt. Die Notizen bleiben unverändert.</p>
+
+  <h2>Die Probe: der Check</h2>
+  <div style="display:flex;align-items:center;gap:10pt;flex-wrap:wrap;background:var(--mist);border-radius:12pt;padding:12pt 14pt;color:var(--ink);font-size:11pt">
+    <span><strong>Gesamt</strong></span><span>−</span><span><strong>Normal</strong></span><span>−</span><span><strong>alle Ohne</strong></span><span>+</span><span><strong>Kombi</strong></span><span>=</span><span class="num-c" style="width:28pt;height:28pt;font-size:13pt">0</span>
+  </div>
+  <p style="margin-top:8pt"><strong>Kombi</strong> heißt: Eine Person will in derselben Mahlzeit zwei Dinge weglassen, z. B. ohne Nüsse <em>und</em> ohne Zwiebel. Das ist eine Portion, nicht zwei. Die App weist dich im Ergebnis darauf hin.</p>
+  <p>Wer „Ohne Mittag“ und „Ohne Nüsse“ hat, bekommt mittags nichts und zählt dort auch nicht als Sonderportion. Die App erledigt das für dich.</p>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 18 ERKENNEN ===================== -->
+<section class="page">
+  <div class="kicker">Hintergrund</div>
+  <h1>Wie die App <b>Wünsche erkennt</b></h1>
+  <p class="lead">Die App arbeitet mit einem Regelkatalog: einer Liste von Suchwörtern pro Wunsch. Sie liest Notizen und Spezialwünsche Stück für Stück.</p>
+
+  <div class="steps" style="gap:10pt">
+    <div class="step"><span class="num-c">1</span><div><strong>Text in Stücke teilen</strong><p>an Strichpunkt, Komma, Bindestrich mit Leerzeichen, senkrechtem Strich oder Zeilenumbruch. Aus „OM; 2xAbend, Stock: 2“ werden drei Stücke.</p></div></div>
+    <div class="step"><span class="num-c">2</span><div><strong>Jedes Stück mit den Regeln vergleichen</strong><p>„OM“ → Ohne Mittag. „2xAbend“ → 2x Abend. „Stock: 2“ → Lieferinfo, wird ignoriert.</p></div></div>
+    <div class="step"><span class="num-c">3</span><div><strong>Datum prüfen</strong><p>Steht ein anderes Datum als der Liefertag im Stück, zählt die App es nicht automatisch, sondern fragt dich.</p></div></div>
+    <div class="step"><span class="num-c">4</span><div><strong>Unklares an dich geben</strong><p>Klingt ein Stück nach Wunsch, passt aber keine Regel, landet es bei „braucht deinen Blick“.</p></div></div>
+  </div>
+
+  <h2>Die Arten von Regeln</h2>
+  <table class="t">
+    <tr><th style="width:34%">Art</th><th>Was passiert</th><th style="width:30%">Beispiele</th></tr>
+    <tr><td><strong>Zutat</strong> <span class="small">(mahlzeitabhängig)</span></td><td>Sonderportion, nur in Mahlzeiten mit dieser Zutat</td><td>Nüsse, Z&amp;K, Rosinen</td></tr>
+    <tr><td><strong>Ohne Mahlzeit</strong> <span class="small">(−1)</span></td><td>eine Portion weniger</td><td>Ohne Frühstück, OM</td></tr>
+    <tr><td><strong>Mehrfach Mahlzeit</strong> <span class="small">(+N−1)</span></td><td>zusätzliche Portionen</td><td>2x Abend, 3x Frühstück</td></tr>
+    <tr><td><strong>Add-on</strong> <span class="small">(eigene Spalte)</span></td><td>wird extra gezählt</td><td>Bitterstoffe, Kreatin</td></tr>
+    <tr><td><strong>Lieferinfo</strong> <span class="small">(ignorieren)</span></td><td>zählt nicht, bleibt in der Notiz</td><td>Stock, Klingel, Rabatt, Nachbar</td></tr>
+  </table>
+
+  <div class="note note--ok" style="margin-top:14pt">
+    <span class="ic"><svg><use href="#i-check"/></svg></span>
+    <div><p><strong>Nichts ist versteckt.</strong> Jeder erkannte Wunsch hat eine Begründung: welche Regel, welches Suchwort, welcher Text, welche Spalte. Klick im Schritt „Prüfen“ einfach auf den Chip.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 19 VERLAUF + EINSTELLUNGEN ===================== -->
+<section class="page">
+  <div class="kicker">Oben rechts in der App</div>
+  <h1>Verlauf und <b>Einstellungen</b></h1>
+  <p class="lead">Neben „Ablauf“ gibt es oben zwei weitere Bereiche.</p>
+
+  <div class="card" style="margin-bottom:12pt">
+    <h3><span class="ic"><svg><use href="#i-history"/></svg></span>Verlauf</h3>
+    <p style="margin-top:6pt">Hier steht jeder Liefertag als Karte: Wochentag, Datum, KW, Boxen und ob die Dateien schon erzeugt sind.</p>
+    <div style="display:flex;gap:6pt;margin:6pt 0 8pt;flex-wrap:wrap">
+      <span class="pill">50 Boxen</span><span class="pill pill--lime">6 Dateien</span><span class="pill">in Arbeit</span><span class="pill pill--coral">2 offen</span>
+    </div>
+    <ul class="bul">
+      <li><strong>Klick auf eine Karte</strong> öffnet den Tag. So kannst du Dateien noch einmal laden oder weitermachen.</li>
+      <li><strong>Neuer Tag</strong> startet mit einer leeren Seite für die nächste Gesamtliste.</li>
+      <li>Lädst du für denselben Liefertag noch einmal eine Liste hoch, <strong>ersetzt</strong> sie den alten Stand dieses Tages.</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-bottom:12pt">
+    <h3><span class="ic"><svg><use href="#i-gear"/></svg></span>Einstellungen · Regelkatalog</h3>
+    <p style="margin-top:6pt">Hier stehen alle Regeln mit ihren Suchwörtern. Änderungen gelten für alle künftigen Tage.</p>
+    <ul class="bul">
+      <li><strong>Regeln testen:</strong> Gib einen Text ein, wie er in einer Notiz stehen könnte, z. B. „OM; 2xAbend, bitte ohne Koriander“. Die App zeigt sofort, was sie erkennt.</li>
+      <li><strong>Neues Suchwort:</strong> Schreibt jemand immer „Knobl.“? Dann bei der Regel Z&amp;K ein Suchmuster ergänzen und <strong>Speichern</strong>.</li>
+      <li><strong>Suchwörter.xlsx importieren</strong> übernimmt eine Liste von Suchwörtern auf einmal.</li>
+    </ul>
+    <div class="note note--warn" style="margin-bottom:0">
+      <span class="ic"><svg><use href="#i-warn"/></svg></span>
+      <div><p>Regeln nur ändern, wenn du dir sicher bist, und danach mit dem Testfeld prüfen. Im Zweifel den Admin fragen.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic"><svg><use href="#i-mail"/></svg></span>Einstellungen · Mailvorlagen</h3>
+    <p style="margin-top:6pt">Pro Empfänger gibt es E-Mail-Adresse, Betreff und einen Standardtext. Für einzelne Wochentage kannst du einen eigenen Text hinterlegen. Platzhalter in geschweiften Klammern füllt die App automatisch:</p>
+    <div style="display:flex;gap:4pt;flex-wrap:wrap">
+      <code>{datum}</code><code>{wochentag}</code><code>{boxen}</code><code>{frueh}</code><code>{mittag}</code><code>{abend}</code><code>{ohne_nuss}</code><code>{ohne_zk}</code><code>{addons}</code>
+    </div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 20 KAPITEL 04 ===================== -->
+<section class="page page--lemon">
+  <div class="deco" style="width:120mm;height:120mm;background:var(--orange);left:-40mm;top:-40mm;opacity:.45"></div>
+  <div class="deco" style="width:40mm;height:40mm;background:var(--lime);right:30mm;bottom:40mm;opacity:.8"></div>
+  <div class="chapter-no">04</div>
+  <div class="chapter-title">Hilfe</div>
+  <p class="chapter-lead">Wenn etwas hakt: Antworten auf häufige Fragen, ein Spickzettel für den Schreibtisch und Infos für den Admin.</p>
+  <div class="chapter-list">
+    <div><span class="num-c">A</span>Häufige Fragen</div>
+    <div><span class="num-c">B</span>Spickzettel</div>
+    <div><span class="num-c">C</span>Für den Admin</div>
+  </div>
+</section>
+
+<!-- ===================== 21 FAQ ===================== -->
+<section class="page">
+  <div class="kicker">Häufige Fragen</div>
+  <h1>Wenn etwas <b>hakt</b></h1>
+  <p class="lead">Die häufigsten Stolpersteine und was du tun kannst.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10pt">
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Das Lieferdatum stimmt nicht</h3><p style="margin-top:4pt">Im Schritt 1 das Datum im Feld „Datum ändern“ korrigieren. Tipp: Dateiname immer <code>TT.MM. Gesamt.xlsx</code> mit dem Lieferdatum.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Die Datei wird abgelehnt</h3><p style="margin-top:4pt">Es geht nur <code>.xlsx</code> bis 10 MB. Exportier im Backoffice „Lieferanten (Excel)“, nicht CSV.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Ein Wunsch wurde falsch erkannt</h3><p style="margin-top:4pt">Im Schritt „Prüfen“ beim Chip auf × klicken. Fehlt einer, über den Stift ✎ hinzufügen. Danach die Dateien neu erzeugen.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Ein Wunsch wird nicht gezählt</h3><p style="margin-top:4pt">Ist er noch offen (Status „prüfen“)? Ist im Speiseplan die Zutat bei „keine“? Dann ist das richtig so.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>„Dateien erzeugen“ ist grau</h3><p style="margin-top:4pt">Im Speiseplan hat noch nicht jede Zutat eine Auswahl. Die App nennt sie im gelben Hinweis.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Ich habe nach dem Erzeugen etwas geändert</h3><p style="margin-top:4pt">Im Ergebnis auf <strong>Neu erzeugen</strong> klicken und die Dateien neu herunterladen.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Der Check in der Rezeptdatei ist rot</h3><p style="margin-top:4pt">Prüf, ob du die Zeilen beim richtigen Tag und in der Reihenfolge Abend, Frühstück, Mittag eingefügt hast.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Die Boxenzahl weicht ab</h3><p style="margin-top:4pt">Die App zählt Zeilen mit Bestellnummer. Steht im Titel eine andere Zahl, im Backoffice nachsehen.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Die Seite lädt nicht</h3><p style="margin-top:4pt">Die App läuft gerade nicht. Admin Bescheid geben, er startet sie in einer Minute neu.</p></div>
+    <div class="card"><h3><span class="ic ic--orange"><svg><use href="#i-help"/></svg></span>Ich habe die falsche Liste hochgeladen</h3><p style="margin-top:4pt">Im Schritt 1 auf „Andere Liste“ klicken und die richtige hochladen.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 22 SPICKZETTEL ===================== -->
+<section class="page">
+  <div class="kicker">Zum Ausdrucken</div>
+  <h1>Der <b>Spickzettel</b></h1>
+  <p class="lead">Alles Wichtige auf einer Seite. Häng sie dir neben den Bildschirm.</p>
+
+  <div style="display:grid;gap:8pt">
+    <div class="card" style="display:flex;gap:12pt;align-items:center;padding:10pt 14pt"><span class="num-c" style="width:30pt;height:30pt;font-size:12pt">0</span><div><strong>Vorbereitung:</strong> Backoffice → Lieferungen → MORGEN → EXPORT → Lieferanten (Excel) → speichern als <code>TT.MM. Gesamt.xlsx</code></div></div>
+    <div class="card" style="display:flex;gap:12pt;align-items:center;padding:10pt 14pt"><span class="num-c" style="width:30pt;height:30pt;font-size:12pt">1</span><div><strong>Hochladen:</strong> Datei reinziehen · Lieferdatum und Boxen prüfen</div></div>
+    <div class="card" style="display:flex;gap:12pt;align-items:center;padding:10pt 14pt"><span class="num-c" style="width:30pt;height:30pt;font-size:12pt">2</span><div><strong>Prüfen:</strong> offene Fälle entscheiden (Übernehmen / Eigener Wunsch / Ignorieren) · Chips kurz überfliegen</div></div>
+    <div class="card" style="display:flex;gap:12pt;align-items:center;padding:10pt 14pt"><span class="num-c" style="width:30pt;height:30pt;font-size:12pt">3</span><div><strong>Speiseplan:</strong> pro Zutat Früh / Mittag / Abend / keine · <strong>Dateien erzeugen</strong></div></div>
+    <div class="card" style="display:flex;gap:12pt;align-items:center;padding:10pt 14pt"><span class="num-c" style="width:30pt;height:30pt;font-size:12pt">4</span><div><strong>Ergebnis:</strong> ZIP laden, im KW-Ordner speichern · „Sortiment neu“ kopieren → Rezeptdatei · So/Di: Brotmenge</div></div>
+    <div class="card" style="display:flex;gap:12pt;align-items:center;padding:10pt 14pt"><span class="num-c num-c--ink" style="width:30pt;height:30pt;font-size:12pt">5</span><div><strong>Abschluss:</strong> Mails (Goran + Gesamtliste, Gaumenfreundinnen + Spezialwünsche-PDF) · Etiketten Avery 3424 · AC Kurbrief 11:00 · QR-Link tauschen und testen</div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:14pt">
+    <div>
+      <h2 style="margin-top:0">AC-Formate</h2>
+      <table class="t">
+        <tr><td>Tag</td><td><code>V_Kurbrief_JJ.MM.TT</code></td></tr>
+        <tr><td>Suche</td><td><code>TT.MM.JJJJ</code></td></tr>
+        <tr><td>Liste</td><td><code>V_Kurbrief</code></td></tr>
+        <tr><td>Versand</td><td><strong>11:00 Uhr</strong></td></tr>
+      </table>
+    </div>
+    <div>
+      <h2 style="margin-top:0">Kürzel</h2>
+      <table class="t">
+        <tr><td><strong>OF / OM / OA</strong></td><td>ohne Früh / Mittag / Abend (−1)</td></tr>
+        <tr><td><strong>2x / 3x</strong></td><td>+1 / +2</td></tr>
+        <tr><td><strong>ON</strong></td><td>ohne Nüsse</td></tr>
+        <tr><td><strong>ZK</strong></td><td>ohne Zwiebel &amp; Knoblauch</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="note note--warn" style="margin-top:12pt">
+    <span class="ic"><svg><use href="#i-warn"/></svg></span>
+    <div><p><strong>Nie vergessen:</strong> Allergien ernst nehmen · QR-Code nie löschen, nur den Link tauschen · Kontaktzahl in AC vergleichen.</p></div>
+  </div>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 23 ADMIN ===================== -->
+<section class="page">
+  <div class="kicker">Anhang</div>
+  <h1>Für den <b>Admin</b></h1>
+  <p class="lead">Diese Seite brauchst du nur, wenn die App gestartet, gestoppt oder gesichert werden muss.</p>
+
+  <h2>Starten und stoppen</h2>
+  <p>Die App läuft in Docker. Im Projektordner <code>basenbox</code> ein Terminal öffnen:</p>
+  <table class="t">
+    <tr><th style="width:24%">Aktion</th><th>Befehl</th></tr>
+    <tr><td>Starten</td><td><code>docker compose -f devops/docker-compose.yml up --build</code></td></tr>
+    <tr><td>Stoppen</td><td><code>docker compose -f devops/docker-compose.yml down</code></td></tr>
+    <tr><td>Logs ansehen</td><td><code>docker compose -f devops/docker-compose.yml logs -f</code></td></tr>
+    <tr><td>Läuft sie?</td><td><code>http://localhost:8080</code> öffnen oder <code>curl localhost:8080/api/health</code></td></tr>
+  </table>
+  <p class="small" style="margin-top:6pt">Docker Desktop muss laufen. Erreichbar ist nur Port 8080.</p>
+
+  <h2>Wo liegen die Daten?</h2>
+  <table class="t">
+    <tr><th style="width:34%">Ordner</th><th>Inhalt</th></tr>
+    <tr><td><code>data/output/KW45/04.11. Mittwoch/</code></td><td>alle Dateien eines Liefertags, dazu der hochgeladene Export</td></tr>
+    <tr><td><code>data/config/</code></td><td>Regelkatalog, Mailvorlagen, gemerkte Speisepläne pro Wochentag</td></tr>
+    <tr><td><code>data/input/templates/</code></td><td>optionale Excel-Vorlage für die Spezialwünsche</td></tr>
+  </table>
+
+  <div class="note note--warn" style="margin-top:12pt">
+    <span class="ic"><svg><use href="#i-warn"/></svg></span>
+    <div><p><strong>Datenschutz:</strong> Die Excel-Dateien enthalten Kundendaten (Namen, Adressen, Telefonnummern). Nicht per privater Mail weitergeben, nicht in Chats kopieren, nicht in Git einchecken. Der Ordner <code>data/</code> wird bewusst nicht versioniert.</p></div>
+  </div>
+
+  <h2>Mehr Details</h2>
+  <ul class="bul">
+    <li><code>docs/task.md</code> · die ursprüngliche Arbeitsanleitung</li>
+    <li><code>docs/architecture.md</code> · Aufbau der App, Rechenregeln und Annahmen</li>
+    <li><code>docs/handbuch/handbuch.html</code> · Quelle dieses Handbuchs</li>
+  </ul>
+  <div class="footer"><img src="../company/assets/photos/basenbox_logo.jpg" alt=""><div class="right"><span class="dots"><i></i><i></i><i></i></span><span class="num"></span></div></div>
+</section>
+
+<!-- ===================== 24 RÜCKSEITE ===================== -->
+<section class="page page--ink" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+  <div class="deco" style="width:140mm;height:140mm;background:var(--lemon);right:-60mm;top:-60mm;opacity:.9"></div>
+  <div class="deco" style="width:60mm;height:60mm;background:var(--lime);left:-20mm;bottom:30mm"></div>
+  <div class="deco" style="width:26mm;height:26mm;background:var(--coral);left:40mm;bottom:20mm"></div>
+  <div style="background:var(--white);border-radius:20pt;padding:10mm 14mm">
+    <img src="../company/assets/photos/basenbox_logo.jpg" alt="Basenbox" style="height:16mm;display:block">
+  </div>
+  <div style="font-size:22pt;color:var(--white);margin-top:14mm;letter-spacing:.04em">Bunt. Bio. <b style="color:var(--lemon)">Basisch.</b></div>
+  <p style="margin-top:6pt;font-size:12pt;color:#CFC9C2">täglich. frisch. geliefert.</p>
+  <p style="margin-top:20mm;font-size:9pt;color:#CFC9C2;letter-spacing:.12em;text-transform:uppercase">basenbox.life · Wien</p>
+</section>
+
+</body>
+</html>
