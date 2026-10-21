@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "ink" | "lemon" | "ghost";
+  variant?: "ink" | "lemon" | "ghost" | "danger";
   small?: boolean;
   loading?: boolean;
   icon?: ReactNode;

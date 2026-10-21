@@ -40,6 +40,8 @@ backend/
 4. `PATCH /api/runs/{id}`: Datum, Speiseplan, Korrekturen pro Zeile und Checklisten-Status setzen, danach wieder `recompute`. Die Live-Vorschau braucht keine Dateien.
 5. `POST /api/runs/{id}/generate`: alle Dateien schreiben und den Speiseplan als Vorschlag für diesen Wochentag speichern.
 
+`DELETE /api/runs/{id}` entfernt einen Tag samt Ordner (und den KW-Ordner, wenn er danach leer ist). Im Verlauf geht das nur mit Bestätigung.
+
 Das Frontend rechnet nichts Fachliches nach. Summen, Herleitungen, Mailtexte, TSV, E-Mail-Liste und AC-Strings kommen fertig im Run mit.
 
 ### Regelengine

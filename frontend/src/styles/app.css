@@ -1017,6 +1017,61 @@ h3 {
   overflow: hidden;
 }
 
+/* --- Verlauf: Löschen mit Bestätigung --------------------------------------- */
+.history-item {
+  position: relative;
+}
+
+.history-item > .card {
+  width: 100%;
+  height: 100%;
+}
+
+.history-item .card__head {
+  padding-right: 40px;
+}
+
+.history-item__delete {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: var(--bb-stone);
+  cursor: pointer;
+}
+
+.history-item__delete:hover {
+  background: var(--bb-coral);
+  color: var(--bb-white);
+}
+
+.history-item__confirm {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  padding: 20px;
+  border-radius: var(--radius-l);
+  background: var(--bb-white);
+  border: 2px solid var(--bb-coral);
+}
+
+.history-item__confirm p {
+  margin: 0;
+}
+
+.btn--danger {
+  background: var(--bb-coral);
+  color: var(--bb-white);
+}
+
 .empty > *:not(.deco) {
   position: relative;
   z-index: 1;

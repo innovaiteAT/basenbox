@@ -66,6 +66,15 @@ def test_change_date_moves_folder(client, data_dir):
     assert client.get(f"/api/runs/{run['id']}").status_code == 200
 
 
+def test_delete_run(client, data_dir):
+    run = upload(client).json()
+    assert client.delete(f"/api/runs/{run['id']}").status_code == 204
+    assert not (data_dir / "output" / "KW24").exists()
+    assert client.get(f"/api/runs/{run['id']}").status_code == 404
+    assert client.get("/api/runs").json() == []
+    assert client.delete(f"/api/runs/{run['id']}").status_code == 404
+
+
 def test_rules_config(client):
     rules = client.get("/api/config/rules").json()
     assert {"nuts", "zk", "kreatin"} <= {r["id"] for r in rules}

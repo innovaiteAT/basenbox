@@ -140,7 +140,17 @@ export function App() {
       )}
       {view === "history" && (
         <main className="page">
-          <HistoryScreen currentId={run?.id} onOpen={openRun} onNew={startNew} />
+          <HistoryScreen
+            currentId={run?.id}
+            onOpen={openRun}
+            onNew={startNew}
+            onDeleted={(id) => {
+              if (run?.id !== id) return;
+              setRun(null);
+              lastRun.set(null);
+              setStep(0);
+            }}
+          />
         </main>
       )}
       {view === "settings" && (

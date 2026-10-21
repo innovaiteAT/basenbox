@@ -130,6 +130,15 @@ def load_run(run_id: str) -> Run | None:
     return None
 
 
+def delete_run(run: Run) -> None:
+    folder = Path(run.folder).resolve()
+    if not folder.is_relative_to(output_dir().resolve()):
+        raise ValueError(f"Ordner liegt außerhalb von output/: {folder}")
+    shutil.rmtree(folder)
+    if not any(folder.parent.iterdir()):
+        folder.parent.rmdir()  # leeren KW-Ordner mit aufräumen
+
+
 def read_upload(run: Run) -> bytes:
     return (Path(run.folder) / UPLOAD_NAME).read_bytes()
 

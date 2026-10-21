@@ -26,6 +26,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
     }
     throw new ApiError(message);
   }
+  if (res.status === 204) return undefined as T;
   return res.json() as Promise<T>;
 }
 
@@ -41,6 +42,7 @@ export const api = {
   runs: () => request<RunSummary[]>("GET", "/runs"),
   run: (id: string) => request<Run>("GET", `/runs/${enc(id)}`),
   patch: (id: string, patch: RunPatch) => request<Run>("PATCH", `/runs/${enc(id)}`, patch),
+  deleteRun: (id: string) => request<void>("DELETE", `/runs/${enc(id)}`),
   generate: (id: string) => request<Run>("POST", `/runs/${enc(id)}/generate`),
   fileUrl: (id: string, name: string) => `/api/runs/${enc(id)}/files/${enc(name)}`,
   zipUrl: (id: string) => `/api/runs/${enc(id)}/zip`,

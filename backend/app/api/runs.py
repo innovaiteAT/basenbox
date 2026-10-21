@@ -101,6 +101,13 @@ def patch_run(run_id: str, patch: RunPatch) -> Run:
     return run
 
 
+@router.delete("/{run_id}", status_code=204)
+def delete_run(run_id: str) -> None:
+    run = _get(run_id)
+    storage.delete_run(run)
+    log.info("Lauf %s gelöscht", run.id)
+
+
 @router.post("/{run_id}/generate", response_model=Run)
 def generate(run_id: str) -> Run:
     run = _get(run_id)
