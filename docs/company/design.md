@@ -1,6 +1,6 @@
 # Design: Basenbox
 
-Visuelle Regeln im Stil von basenbox.life. Werte aus dem Live-CSS (Elementor-Kit), Stand 21.10.2026. Alles mit "Vorschlag" ist meine Ergänzung, nicht von der Marke.
+Visuelle Regeln im Basenbox-Stil, abgestimmt auf den Skill `basenbox-pptx`. Abgeleitet aus Logo und Verpackung (Box mit Zitronen-Logo und Badges "bunt · bio · basisch"), Stand 21.10.2026. Alles mit "Vorschlag" ist meine Ergänzung, nicht von der Marke.
 
 ## Marke in einem Satz
 Bunt. Bio. Basisch. Frisch, freundlich, gesund, ohne Hokuspokus. Pflanzliche Bio-Küche aus Wien.
@@ -8,74 +8,93 @@ Bunt. Bio. Basisch. Frisch, freundlich, gesund, ohne Hokuspokus. Pflanzliche Bio
 ## Farben
 | Rolle | Hex | Einsatz |
 |---|---|---|
-| Primär (Marken-Grün) | `#95C11F` | Buttons, H2/H4, Links, Vollflächen-Sections |
-| Text / Dunkel | `#3C3C3B` | Fließtext, Footer-Hintergrund |
-| Weiß | `#FFFFFF` | Header, Karten, Text auf Grün/Dunkel |
-| Gelb | `#FBBA00` | Akzent |
-| Orange | `#F59A28` | Akzent |
-| Himmelblau | `#6EC1E4` | Akzent |
-| Rot | `#E63312` / `#CB2F0D` / `#E84133` | sparsam, Aktionen/Hinweise |
-| Dunkelgrün | `#00983A` | Akzent, Bio/Natur |
+| Zitrone (Primär) | `#FFE000` | Hauptakzent, Kapitel-Folien, Hero-Kacheln, Diagramm-Hauptwert |
+| Orange | `#FFB200` | Zitronen-Schatten, zweiter Diagrammwert, Deko-Kreise |
+| Lime | `#C5DB2E` | "bio"-Badge, Aufzählungspunkte |
+| Grün | `#6FA81E` | große Zahlen, Icons |
+| Koralle | `#E84A3F` | "basisch"-Badge, sparsame Highlights |
+| Anthrazit | `#1A1A1A` | Text, fett betonter Titelteil, Abschlussfolie |
+| Warmgrau | `#5B5550` | Kicker, Sekundärtext, leichter Titelteil |
+| Nebel | `#F4F2EE` | Karten, Icon-Kreise |
+| Linie | `#E4E0DA` | Haarlinien in Tabellen, Kennzahlen, Zeitstrahl |
+| Weiß | `#FFFFFF` | Hintergrund der Inhaltsfolien |
 
 Regeln:
-- Grün dominiert. Die Akzentfarben ("bunt") immer nur einzeln und klein einsetzen.
-- Weiß auf Grün (`#95C11F`) hat knappen Kontrast. Für kleinen Text Dunkelgrau `#3C3C3B` auf Grün oder Weiß nur bei großer Schrift.
+- Gewichtung: ca. 70 % Weiß, 20 % Anthrazit/Warmgrau, 10 % Zitrone. Lime und Koralle nur als Badge-Akzente.
+- Zitrone nie als Schriftfarbe auf Weiß. Auf Zitrone und Lime immer Anthrazit, auf Koralle Weiß.
+- Grün nur für große Zahlen und Icons, nie für Fließtext.
 
 ```css
 :root {
-  --bb-green: #95C11F;
-  --bb-ink: #3C3C3B;
+  --bb-lemon: #FFE000;
+  --bb-orange: #FFB200;
+  --bb-lime: #C5DB2E;
+  --bb-green: #6FA81E;
+  --bb-coral: #E84A3F;
+  --bb-ink: #1A1A1A;
+  --bb-stone: #5B5550;
+  --bb-mist: #F4F2EE;
+  --bb-line: #E4E0DA;
   --bb-white: #FFFFFF;
-  --bb-yellow: #FBBA00;
-  --bb-orange: #F59A28;
-  --bb-blue: #6EC1E4;
-  --bb-red: #E63312;
-  --bb-forest: #00983A;
 }
 ```
 
 ## Typografie
-- **Überschriften und Buttons: "Happy"** (KG Happy Solid), Gewicht 300, Laufweite eng (`letter-spacing: -3px` bei H1/H2), Groß-/Kleinschreibung wie im Satz, kein Uppercase.
-- **Fließtext: "Archer"**, Slab-Serif, Gewicht 500.
-- Fallbacks (Vorschlag): Happy → `Fredoka`, Archer → `Rokkitt` (lädt die Seite selbst), dann `sans-serif`.
-- Lizenz klären: Happy und Archer sind keine freien Fonts. Ohne Lizenz die Fallbacks nutzen.
+- **Eine Schrift für alles: Century Gothic** (geometrisch, nah an der Logo-Wortmarke, in Office auf Windows und Mac vorinstalliert).
+- **Titel zweistufig wie das Logo "BASEN**BOX**":** Versalien, leichte Laufweite. Erster Teil normal in Warmgrau, Schlüsselwort fett in Anthrazit. Beispiel: DREI **SÄULEN**.
+- **Kicker** über dem Titel: 11 pt, fett, Versalien, weite Laufweite, Warmgrau.
+- Titelfolie und Kapitel-Folien in Satzschreibung, fett.
+- Fallback (Vorschlag) für Web: `Questrial` oder `Didact Gothic`, dann `sans-serif`.
 
-| Element | Schrift | Größe | Farbe |
+| Element | Größe | Stil | Farbe |
 |---|---|---|---|
-| H1 | Happy 300 | 35px / 35px | Weiß (auf Foto/Grün) |
-| H2 | Happy 300 | 40px | `#95C11F` |
-| H3 | Happy 300 | 24px | Weiß (auf Grün/Dunkel) |
-| H4 | Happy 300 | 20px | `#95C11F` |
-| Body | Archer 500 | 16px / 24px (Intro-Text 25px / 37,5px) | `#3C3C3B` |
-| Button | Happy 300 | 18px | Weiß |
+| Titel Titelfolie | 40 pt | Satzschreibung, zweistufig | Warmgrau + Anthrazit |
+| Kapitelnummer | 190 pt | fett | Anthrazit auf Zitrone |
+| Kapiteltitel | 44 pt | fett | Anthrazit auf Zitrone |
+| Folientitel | 28–30 pt | Versalien, zweistufig | Warmgrau + Anthrazit |
+| Kicker | 11 pt | fett, Versalien | Warmgrau |
+| Hero-Zahl | 80 pt | fett | Anthrazit auf Zitrone |
+| Kennzahl | 40 pt | fett | Grün, Orange oder Koralle |
+| Zwischentitel | 16–19 pt | fett | Anthrazit |
+| Fließtext | 13–16 pt, nie unter 12 pt | normal | Warmgrau |
+
+## Motiv: Kreise
+- **Badge-Trio** bunt (Zitrone) · bio (Lime) · basisch (Koralle), überlappend, mit weißem Rand. Auf Titel- und Statement-Folie.
+- Drei kleine Farbpunkte im Footer jeder Inhaltsfolie.
+- Nummerierte Kreise in der Agenda, Icons in Farbkreisen, große Deko-Kreise auf Kapitel- und Abschlussfolie.
+- Keine Balken, Streifen oder Linien unter Titeln.
 
 ## Komponenten
-- **Button (primär):** Hintergrund `#95C11F`, Text weiß, `border-radius: 3px`, `padding: 20px 40px`, Schatten `0 0 10px rgba(0,0,0,.5)`. Texte klein und direkt: "Basenkur bestellen", "jetzt bestellen".
-- **Links:** `#95C11F`, ohne Unterstreichung.
-- **Header:** weiß, ca. 66px hoch, weicher Schatten (`0 4px 6px -1px rgba(0,0,0,.1)`).
-- **Footer:** `#3C3C3B`, Text weiß.
-- **Sections:** abwechselnd weiß und vollflächig grün. Viel Weißraum.
-- **Bilder:** quadratische Food-Fotos und freigestellte Gerichte, keine Rundungen (`border-radius: 0`).
-- **Vertrauenselemente:** Bio-Siegel, EU-Bio-Logo, Presse-Logos (Puls 4, Kurier, Wienerin, 2 Minuten 2 Millionen) in einer Reihe, dezent.
+- **Karten:** Fläche Nebel `#F4F2EE`, abgerundete Ecken, Icon im Farbkreis oben links.
+- **Hero-Kachel:** Zitrone, abgerundet, eine große Zahl mit kurzer Beschriftung.
+- **Tabellen:** ohne Gitter, nur Haarlinien `#E4E0DA`; Kopfzeile Nebel, hervorgehobene Spalte Zitrone.
+- **Icons:** Lucide-Linienicons, Anthrazit (auf Koralle weiß).
+- **Logo:** nur die Originaldatei verwenden, nie nachzeichnen. Varianten: Original (weiße Folien), hell (dunkle Folien), einfarbig Anthrazit (Zitronen-Folien).
+- **Footer:** Logo klein links, Farbpunkte und Seitenzahl rechts.
+
+## Folienrhythmus
+- Weiße Inhaltsfolien als Grundton.
+- Zitronengelbe Kapitel-Folien als Taktgeber.
+- Anthrazitfarbene Abschlussfolie mit hellem Logo und Kontaktzeilen.
+- Folientypen abwechseln: Karten, Kennzahlen, Donut, Zeitstrahl, Bild + Text, Tabelle, Statement. Nicht mehr als zwei gleiche hintereinander.
 
 ## Bildsprache
-- Helle, farbige Gerichte von oben oder frontal, natürliches Licht.
-- Echte Menschen und Gründer:innen, Testimonials mit Foto, Vorname und Beruf.
+- Helle Fotos mit natürlichem Licht: die Box, Gerichte von oben oder frontal, echte Menschen.
+- Fotos mit abgerundeten Ecken (Inhaltsfolien) oder randabfallend (Titelfolie rechts).
 - Keine Stockfoto-Optik, keine Diät-Klischees.
 
 ## Tonalität
 - **Du-Form**, kurz, warm, selbstbewusst.
-- Claims in Punkt-Sätzen: "täglich. frisch. geliefert." und "Bunt. Bio. Basisch."
-- Überschriften oft klein geschrieben: "basisch entgiften", "3 Gerichte".
-- Nutzenbotschaften: entgiften, entsäuern, abnehmen, Zeit sparen.
-- Fakten statt Heilversprechen: 100 % Bio, pflanzlich, glutenfreie Zutaten (nicht zertifiziert), clean, Geld-zurück-Garantie.
-- Social: dezente Emojis (🌱 💚 ✨), Hashtags wie `#basenbox`, `#basenkur`, Aufforderung zur Interaktion ("Schreib uns INFO").
+- Claims in Punkt-Sätzen: "Bunt. Bio. Basisch." und "täglich. frisch. geliefert."
+- Eine Botschaft pro Folie, Titel ohne Punkt am Ende.
+- Nutzenbotschaften: entgiften, entsäuern, Zeit sparen.
+- Fakten statt Heilversprechen: 100 % Bio, pflanzlich, glutenfreie Zutaten (nicht zertifiziert).
 
 ## Dos und Don'ts
-- Do: viel Grün, runde freundliche Schrift, kurze Sätze, ein klarer Call-to-Action pro Abschnitt.
-- Do: Akzentfarben als kleine Farbtupfer (Icons, Labels).
-- Don't: Uppercase-Überschriften, dunkle Dramatik, mehr als eine Akzentfarbe pro Element.
-- Don't: Gesundheits- oder Heilversprechen ohne Beleg, Fachjargon, Verbotsrhetorik.
+- Do: viel Weiß, Zitrone als klarer Akzent, Kreise als Motiv, kurze Sätze.
+- Do: zweistufige Titel, Lime und Koralle nur als kleine Badges.
+- Don't: Zitrone als Textfarbe, weißer Text auf Zitrone, mehr als eine Akzentfarbe pro Element.
+- Don't: Akzentstreifen, Linien unter Titeln, Gesundheits- oder Heilversprechen ohne Beleg.
 
-## Quelle
-Live-Stylesheet und Seite: https://www.basenbox.life/ (Computed Styles und Elementor-Variablen, abgerufen am 21.10.2026). Logo-Form und Illustrationsstil habe ich nicht ausgewertet. Dafür die Originaldateien von der Marke holen.
+## Abweichungen zur Website
+Die Website basenbox.life nutzt ein anderes System (Elementor-Kit, abgerufen am 21.10.2026): Marken-Grün `#95C11F` als Primärfarbe, Text `#3C3C3B`, Schriften "Happy" (Überschriften) und "Archer" (Fließtext), eckige Bilder. Für Präsentationen gilt das Verpackungs-Design oben; für Web-Material vorher klären, welches System gelten soll.

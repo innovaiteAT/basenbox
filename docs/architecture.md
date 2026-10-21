@@ -2,14 +2,11 @@
 
 ## Überblick
 
-```
-Browser --> frontend (nginx :8080) --/api/--> backend (FastAPI :3000)
-```
 
 | Bereich    | Ordner      | Technik           |
 |------------|-------------|-------------------|
-| Backend    | `backend/`  | Python 3.12, FastAPI |
-| Frontend   | `frontend/` | statisches HTML   |
+| Backend    | `backend/`  |  |
+| Frontend   | `frontend/` |    |
 | DevOps     | `devops/`   | Docker Compose, nginx |
 | Daten      | `data/`     | Excel-Ein- und Ausgabe, als Volume ins Backend gemountet |
 

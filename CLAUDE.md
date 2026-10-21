@@ -2,13 +2,6 @@
 
 Automatisiert den täglichen Liefer-Ablauf von Basenbox (Wiener Basenkur-Lieferdienst): aus dem Backoffice-Export (`TT.MM. Gesamt.xlsx`) und den Spezialwünschen entstehen Etikettenliste, Spezialwunsch-Liste mit Mengen (Früh/Mittag/Abend) usw. Fachlicher Ablauf: `docs/task.md` (SOP). Aktueller Stand: Grundgerüst, noch keine Excel-Logik.
 
-## Aufbau
-- `backend/`: Python 3.12 + FastAPI, alle Routen unter `/api/*` in `backend/main.py`
-- `frontend/`: statisches `index.html`, ruft `/api/...` per `fetch` auf, wird von nginx ausgeliefert
-- `devops/`: `docker-compose.yml`, Dockerfiles (`devops/docker/`), nginx-Config (`devops/nginx/nginx.conf`)
-- `data/`: `input/` (Originaltabellen, Beispiel unter `input/example/KW24/`, Vorlagen unter `input/templates/`) und `output/` (Ergebnisse). Im Backend unter `/app/data` gemountet, Inhalt gitignored
-- `docs/`: `architecture.md`, `roadmap.md` (bei Änderungen aktuell halten), `task.md` (SOP), `company/` (Firmenkontext, Design, Logo; nur bei Bedarf lesen)
-
 ## Befehle
 - Start: `docker compose -f devops/docker-compose.yml up --build`
 - Stop: `docker compose -f devops/docker-compose.yml down`
