@@ -134,7 +134,7 @@ export function App() {
                   setStep(3);
                 }} />}
             {props && step === 3 && <ResultScreen {...props} onGenerated={setRun} />}
-            {props && step === 4 && <FinishScreen {...props} />}
+            {props && step === 4 && <FinishScreen {...props} onRestart={startNew} />}
           </main>
         </>
       )}

@@ -1,4 +1,4 @@
-import { ArrowLeft, Download, ExternalLink, Mail, PartyPopper, QrCode, Send, Tags } from "lucide-react";
+import { ArrowLeft, CheckCheck, Download, ExternalLink, Home, Mail, PartyPopper, QrCode, Send, Tags } from "lucide-react";
 import type { ReactNode } from "react";
 import type { ScreenProps } from "../App";
 import { api } from "../api/client";
@@ -12,7 +12,7 @@ import { Title } from "../components/Title";
 
 const QR_URL = "https://app.qr-code-generator.com/manage/?login=1";
 
-export function FinishScreen({ run, patch, go }: ScreenProps) {
+export function FinishScreen({ run, busy, patch, go, onRestart }: ScreenProps & { onRestart: () => void }) {
   const d = run.derived;
   const label = run.delivery.label;
   const labelsFile = run.files.find((f) => f.endsWith("Etikettenliste.xlsx"));
@@ -139,6 +139,13 @@ export function FinishScreen({ run, patch, go }: ScreenProps) {
   const doneCount = all.filter((id) => run.checklist[id]).length;
   const finished = doneCount === all.length;
   const toggle = (id: string, value: boolean) => patch({ checklist: { [id]: value } });
+  const checkAll = (items: ChecklistItem[]) => patch({ checklist: Object.fromEntries(items.map((i) => [i.id, true])) });
+
+  const restartButton = (
+    <Button variant="lemon" icon={<Home size={18} />} onClick={onRestart}>
+      Zurück zum Start
+    </Button>
+  );
 
   return (
     <>
@@ -162,6 +169,11 @@ export function FinishScreen({ run, patch, go }: ScreenProps) {
           <p className="lead" style={{ margin: "12px auto 0", color: "var(--bb-ink)" }}>
             Alles für {run.delivery.weekday}, den {label}, ist erledigt. Danke dir!
           </p>
+          <div style={{ marginTop: 24 }}>
+            <Button icon={<Home size={18} />} onClick={onRestart}>
+              Zurück zum Start
+            </Button>
+          </div>
         </div>
       ) : (
         <Card white title={`${doneCount} von ${all.length} erledigt`} subtitle="Hak ab, was du gemacht hast.">
@@ -179,7 +191,16 @@ export function FinishScreen({ run, patch, go }: ScreenProps) {
               iconTone={n === g.items.length ? "lime" : "lemon"}
               title={g.title}
               subtitle={g.subtitle}
-              aside={<span className={`pill ${n === g.items.length ? "pill--lime" : "pill--mist"}`}>{n}/{g.items.length}</span>}
+              aside={
+                <div className="actions">
+                  {n < g.items.length && (
+                    <Button variant="ghost" small disabled={busy} icon={<CheckCheck size={16} />} onClick={() => checkAll(g.items)}>
+                      Alle abhaken
+                    </Button>
+                  )}
+                  <span className={`pill ${n === g.items.length ? "pill--lime" : "pill--mist"}`}>{n}/{g.items.length}</span>
+                </div>
+              }
             >
               {g.before}
               <Checklist items={g.items} done={run.checklist} onToggle={toggle} />
@@ -192,6 +213,7 @@ export function FinishScreen({ run, patch, go }: ScreenProps) {
         <Button variant="ghost" icon={<ArrowLeft size={16} />} onClick={() => go(3)}>
           Zurück zum Ergebnis
         </Button>
+        {finished && restartButton}
       </div>
     </>
   );
